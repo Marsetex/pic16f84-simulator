@@ -5,25 +5,29 @@
 	<groupId>de.marsetex</groupId>
 	<artifactId>PIC16F84-Simulator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	
-		<build>
+
+	<properties>
+		<javafx.version>12</javafx.version>
+	</properties>
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.8.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.1.1</version>
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>de.marsetex.tubedb.AppStarter</mainClass>
+							<mainClass>de.marsetex.simulator.AppStarter</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -44,5 +48,16 @@
 	</build>
 
 	<dependencies>
+		<!-- JavaFX -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>${javafx.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>${javafx.version}</version>
+		</dependency>
 	</dependencies>
 </project>
