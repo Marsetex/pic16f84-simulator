@@ -21,6 +21,7 @@ public class FXStageInitializer extends Application {
 
 		stage.setScene(scene);
 		stage.setTitle("PIC16F84-Simulator");
+		stage.setMaximized(true);
 		stage.show();
 	}
 
