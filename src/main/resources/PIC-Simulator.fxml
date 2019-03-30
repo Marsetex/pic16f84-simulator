@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.marsetex.simulator.gui.UIController">
+<VBox prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.marsetex.picsimulator.ui.controller.SimulatorUiController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -29,7 +29,7 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <ListView fx:id="codeView" layoutX="417.0" layoutY="134.0" prefHeight="402.0" prefWidth="414.0" />
+            <ListView fx:id="codeView" layoutX="225.0" layoutY="53.0" prefHeight="594.0" prefWidth="813.0" />
          </children>
     </AnchorPane>
   </children>

@@ -1,4 +1,4 @@
-package de.marsetex.simulator.gui;
+package de.marsetex.picsimulator.ui;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class FXStageInitializer extends Application {
+public class SimulatorUi extends Application {
 
 	public void initUserInterface(String[] args) {
 		launch(args);
