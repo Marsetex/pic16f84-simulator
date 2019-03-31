@@ -1,69 +1,51 @@
 package de.marsetex.picsimulator.ui.controller;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.List;
 
-import de.marsetex.picsimulator.parser.LSTParser;
+import de.marsetex.picsimulator.Simulator;
+import de.marsetex.picsimulator.state.SimStateIdle;
+import de.marsetex.picsimulator.ui.SimulatorUiComponents;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ListView;
-import javafx.stage.FileChooser;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 
 public class SimulatorUiController {
 
 	@FXML
 	private ListView<String> codeView;
-	
-	private FileChooser fileChooser;	
-	private ObservableList<String> lines;
-	
+
+	@FXML
+	private Menu openRecentMenuItem;
+
+	private final Simulator simulator;
+	private final SimulatorUiComponents uiComponents;
+
 	public SimulatorUiController() {
-		fileChooser = new FileChooser();
-		fileChooser.setTitle("Select LST file");
-        fileChooser.setInitialDirectory(
-            new File(System.getProperty("user.home"))
-        );                 
-        fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("LST", "*.LST")
-        );
-        
-        lines = FXCollections.observableArrayList();
+		simulator = Simulator.getInstance();
+		simulator.getCodeLines().subscribe(codeLines -> outputLstFile(codeLines));
+
+		uiComponents = new SimulatorUiComponents();
 	}
-	
+
 	@FXML
 	private void openFileChooser() {
-		File lstFile = fileChooser.showOpenDialog(null);
-		
-		codeView.setStyle("-fx-font: 12 consolas;");
-		
-		if(lstFile != null) {
-			new LSTParser(lstFile);
-			
-			try (BufferedReader br = new BufferedReader(new FileReader(lstFile))) {
+		File lstFile = uiComponents.getFileChooser().showOpenDialog(null);
 
-				String sCurrentLine;
-
-				while ((sCurrentLine = br.readLine()) != null) {
-					System.out.println(sCurrentLine);
-					lines.add(sCurrentLine);
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (lstFile != null) {
+			openRecentMenuItem.getItems().add(new MenuItem(lstFile.getPath()));
+			simulator.changeState(new SimStateIdle(lstFile));
 		}
-		
-		codeView.setItems(lines);
 	}
 
 	@FXML
-	public void showAboutDialog() {
+	private void showAboutDialog() {
+
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("PIC - About");
 		alert.setHeaderText("PIC by Marcel");
@@ -74,5 +56,10 @@ public class SimulatorUiController {
 	@FXML
 	private void exit() {
 		Platform.exit();
+	}
+
+	public void outputLstFile(List<String> codeLines) {
+		codeView.getItems().clear();
+		codeView.setItems(FXCollections.observableArrayList(codeLines));
 	}
 }
