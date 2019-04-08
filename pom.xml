@@ -59,6 +59,19 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>${javafx.version}</version>
 		</dependency>
+		<!-- Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.11.2</version>
+		</dependency>
 		<!-- Utils -->
 		<dependency>
 			<groupId>io.reactivex.rxjava2</groupId>
