@@ -8,16 +8,16 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LSTParser {
+public class LstParser {
 
 	private File lstFile;
 
-	public LSTParser(File file) {
+	public LstParser(File file) {
 		lstFile = file;
 	}
 
 	public List<String> parse() {
-		List<String> codeLines = new ArrayList<String>();
+		List<String> codeLines = new ArrayList();
 
 		try (BufferedReader br = new BufferedReader(new FileReader(lstFile, Charset.forName("ISO-8859-1")))) {
 			String currentLine;
