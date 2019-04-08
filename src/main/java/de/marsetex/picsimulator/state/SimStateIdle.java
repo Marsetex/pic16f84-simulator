@@ -4,8 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import de.marsetex.picsimulator.Simulator;
-import de.marsetex.picsimulator.parser.LSTParser;
-import io.reactivex.Observable;
+import de.marsetex.picsimulator.parser.LstParser;
 
 public class SimStateIdle implements ISimState {
 
@@ -13,7 +12,6 @@ public class SimStateIdle implements ISimState {
 
 	public SimStateIdle(File file) {
 		lstFile = file;
-		System.out.println(file.getPath());
 	}
 
 	@Override
@@ -26,8 +24,10 @@ public class SimStateIdle implements ISimState {
 
 	@Override
 	public void onEnteringState(Simulator simulator) {
-		LSTParser parser = new LSTParser(lstFile);
-		simulator.getCodeLines().onNext(parser.parse());
+		LstParser parser = new LstParser(lstFile);
+		List<String> codeLines = parser.parse();
+		simulator.getCodeLines().onNext(codeLines);
+		simulator.loadCodeIntoProgramMemory(codeLines);
 	}
 
 	@Override
