@@ -1,6 +1,11 @@
-package de.marsetex.picsimulator.instruction.decoder;
+package de.marsetex.picsimulator.decoder;
 
-import de.marsetex.picsimulator.instruction.*;
+import de.marsetex.picsimulator.instruction.IPicInstruction;
+import de.marsetex.picsimulator.instruction.bitoriented.*;
+import de.marsetex.picsimulator.instruction.byteoriented.*;
+import de.marsetex.picsimulator.instruction.control.*;
+import de.marsetex.picsimulator.instruction.literal.*;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,7 +13,7 @@ public class InstructionDecoder {
 
     private static final Logger LOGGER = LogManager.getLogger(InstructionDecoder.class);
 
-    public IInstruction decode(short opcode) {
+    public IPicInstruction decode(short opcode) {
         switch (opcode >> 12) {
             case 0b000:
                 return decodeOpcodeWithPrefix00(opcode);
@@ -24,7 +29,7 @@ public class InstructionDecoder {
         }
     }
 
-    private IInstruction decodeOpcodeWithPrefix00(short opcode) {
+    private IPicInstruction decodeOpcodeWithPrefix00(short opcode) {
         switch(opcode >> 8) {
             case 0b0000000:
                 return decodeSpecialCasesWithPrefix00(opcode);
@@ -69,7 +74,7 @@ public class InstructionDecoder {
      * @param opcode
      * @return
      */
-    private IInstruction decodeSpecialCasesWithPrefix00(short opcode) {
+    private IPicInstruction decodeSpecialCasesWithPrefix00(short opcode) {
         if((opcode >> 7) == 0b01) {
             return new Movwf();
         }
@@ -94,7 +99,7 @@ public class InstructionDecoder {
         }
     }
 
-    private IInstruction decodeOpcodeWithPrefix01(short opcode) {
+    private IPicInstruction decodeOpcodeWithPrefix01(short opcode) {
         switch(opcode >> 10) {
             case 0b0100:
                 return new Bcf();
@@ -110,7 +115,7 @@ public class InstructionDecoder {
         }
     }
 
-    private IInstruction decodeOpcodeWithPrefix10(short opcode) {
+    private IPicInstruction decodeOpcodeWithPrefix10(short opcode) {
         switch(opcode >> 11) {
             case 0b0100:
                 return new Call();
@@ -122,7 +127,7 @@ public class InstructionDecoder {
         }
     }
 
-    private IInstruction decodeOpcodeWithPrefix11(short opcode) {
+    private IPicInstruction decodeOpcodeWithPrefix11(short opcode) {
         switch(opcode >> 8) {
             case 0b0110000:
             case 0b0110001:
