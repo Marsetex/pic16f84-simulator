@@ -25,7 +25,43 @@ public class InstructionDecoder {
     }
 
     private IInstruction decodeOpcodeWithPrefix00(short opcode) {
-        return null;
+        switch(opcode >> 8) {
+            case 0b0000000:
+                return null; // NOP, RETURN, RETFIE, SLEEP, CLRWDT or MOVWF
+            case 0b0000001:
+                return null; // CLRW or CLRF
+            case 0b0000010:
+                return null; // SUBWF
+            case 0b0000011:
+                return null; // DECF
+            case 0b0000100:
+                return null; // IORWF
+            case 0b0000101:
+                return null; // ANDWF
+            case 0b0000110:
+                return null; // XORWF
+            case 0b0000111:
+                return null; // ADDWF
+            case 0b0001000:
+                return null; // MOVF
+            case 0b0001001:
+                return null; // COMF
+            case 0b0001010:
+                return null; // INCF
+            case 0b0001011:
+                return null; // DECFSZ
+            case 0b0001100:
+                return null; // RRF
+            case 0b0001101:
+                return null; // RLF
+            case 0b0001110:
+                return null; // SWAPF
+            case 0b0001111:
+                return null; // INCFSZ
+            default:
+                LOGGER.error("Unknown opcode with prefix 0b000");
+                return null;
+        }
     }
 
     private IInstruction decodeOpcodeWithPrefix01(short opcode) {
