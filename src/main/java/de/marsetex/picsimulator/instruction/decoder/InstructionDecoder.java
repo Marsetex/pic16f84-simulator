@@ -27,39 +27,69 @@ public class InstructionDecoder {
     private IInstruction decodeOpcodeWithPrefix00(short opcode) {
         switch(opcode >> 8) {
             case 0b0000000:
-                return null; // NOP, RETURN, RETFIE, SLEEP, CLRWDT or MOVWF
+                return decodeSpecialCasesWithPrefix00(opcode);
             case 0b0000001:
-                return null; // CLRW or CLRF
+                return ((opcode >> 7) == 0b011) ? new Clrf() : new Clrw();
             case 0b0000010:
-                return null; // SUBWF
+                return new Subwf();
             case 0b0000011:
-                return null; // DECF
+                return new Decf();
             case 0b0000100:
-                return null; // IORWF
+                return new Iorwf();
             case 0b0000101:
-                return null; // ANDWF
+                return new Andwf();
             case 0b0000110:
-                return null; // XORWF
+                return new Xorwf();
             case 0b0000111:
-                return null; // ADDWF
+                return new Addwf();
             case 0b0001000:
-                return null; // MOVF
+                return new Movf();
             case 0b0001001:
-                return null; // COMF
+                return new Comf();
             case 0b0001010:
-                return null; // INCF
+                return new Incf();
             case 0b0001011:
-                return null; // DECFSZ
+                return new Decfsz();
             case 0b0001100:
-                return null; // RRF
+                return new Rrf();
             case 0b0001101:
-                return null; // RLF
+                return new Rlf();
             case 0b0001110:
-                return null; // SWAPF
+                return new Swapf();
             case 0b0001111:
-                return null; // INCFSZ
+                return new Incfsz();
             default:
                 LOGGER.error("Unknown opcode with prefix 0b000");
+                return null;
+        }
+    }
+
+    /**
+     * Decode instructions, which can not be identified by bit shifting.
+     * @param opcode
+     * @return
+     */
+    private IInstruction decodeSpecialCasesWithPrefix00(short opcode) {
+        if((opcode >> 7) == 0b01) {
+            return new Movwf();
+        }
+
+        switch(opcode) {
+            case 0b0000000000000000:
+            case 0b0000000000100000:
+            case 0b0000000001000000:
+            case 0b0000000001100000:
+                return new Nop();
+            case 0b0000000000001000:
+                return new Return();
+            case 0b0000000000001001:
+                return new Retfie();
+            case 0b0000000001100011:
+                return new Sleep();
+            case 0b0000000001100100:
+                return new Clrwdt();
+            default:
+                LOGGER.error("Unknown opcode with prefix 0b000 (special cases)");
                 return null;
         }
     }
@@ -67,13 +97,13 @@ public class InstructionDecoder {
     private IInstruction decodeOpcodeWithPrefix01(short opcode) {
         switch(opcode >> 10) {
             case 0b0100:
-                return new BCF();
+                return new Bcf();
             case 0b0101:
-                return new BSF();
+                return new Bsf();
             case 0b0110:
-                return new BTFSC();
+                return new Btfsc();
             case 0b0111:
-                return new BTFSS();
+                return new Btfss();
             default:
                 LOGGER.error("Unknown opcode with prefix 0b001");
                 return null;
