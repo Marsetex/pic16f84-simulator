@@ -1,4 +1,4 @@
 package de.marsetex.picsimulator.instruction;
 
-public class BCF implements IInstruction {
+public class Andwf implements IInstruction {
 }

@@ -1,4 +1,4 @@
 package de.marsetex.picsimulator.instruction;
 
-public class BTFSC implements IInstruction {
+public class Rlf implements IInstruction {
 }
