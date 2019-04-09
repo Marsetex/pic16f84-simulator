@@ -1,4 +1,6 @@
-package de.marsetex.picsimulator.instruction;
+package de.marsetex.picsimulator.instruction.bitoriented;
 
-public class Btfss implements IInstruction {
+import de.marsetex.picsimulator.instruction.IPicInstruction;
+
+public class Btfss implements IPicInstruction {
 }

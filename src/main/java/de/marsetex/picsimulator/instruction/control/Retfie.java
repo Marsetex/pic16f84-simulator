@@ -1,6 +1,6 @@
-package de.marsetex.picsimulator.instruction.literal;
+package de.marsetex.picsimulator.instruction.control;
 
-import de.marsetex.picsimulator.instruction.IInstruction;
+import de.marsetex.picsimulator.instruction.IPicInstruction;
 
-public class Retfie implements IInstruction {
+public class Retfie implements IPicInstruction {
 }

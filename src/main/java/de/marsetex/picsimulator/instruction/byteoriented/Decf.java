@@ -1,4 +1,6 @@
-package de.marsetex.picsimulator.instruction;
+package de.marsetex.picsimulator.instruction.byteoriented;
 
-public class Decf implements IInstruction {
+import de.marsetex.picsimulator.instruction.IPicInstruction;
+
+public class Decf implements IPicInstruction {
 }

@@ -1,4 +1,6 @@
-package de.marsetex.picsimulator.instruction;
+package de.marsetex.picsimulator.instruction.byteoriented;
 
-public class Iorwf implements IInstruction {
+import de.marsetex.picsimulator.instruction.IPicInstruction;
+
+public class Iorwf implements IPicInstruction {
 }

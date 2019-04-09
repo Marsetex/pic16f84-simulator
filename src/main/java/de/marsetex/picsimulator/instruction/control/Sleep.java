@@ -1,6 +1,6 @@
-package de.marsetex.picsimulator.instruction.literal;
+package de.marsetex.picsimulator.instruction.control;
 
-import de.marsetex.picsimulator.instruction.IInstruction;
+import de.marsetex.picsimulator.instruction.IPicInstruction;
 
-public class Sleep implements IInstruction {
+public class Sleep implements IPicInstruction {
 }
