@@ -2,9 +2,11 @@ package de.marsetex.picsimulator.decoder;
 
 import de.marsetex.picsimulator.instruction.*;
 import de.marsetex.picsimulator.instruction.literal.*;
+import org.hamcrest.core.Is;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Test;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class InstructionDecoderTest {
@@ -16,6 +18,10 @@ public class InstructionDecoderTest {
         String movlwOpcode = "3011";
         IPicInstruction instruction = decoder.decode(Short.parseShort(movlwOpcode, 16));
         assertThat(instruction, IsInstanceOf.instanceOf(Movlw.class));
+
+        Movlw movlw = (Movlw) instruction;
+        assertThat(movlw.getOpcodePrefix(), is(0x0030));
+        assertThat(movlw.getVariableK(), is(0x0011));
     }
 
     @Test
