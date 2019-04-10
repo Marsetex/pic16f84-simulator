@@ -133,7 +133,7 @@ public class InstructionDecoder {
             case 0b0110001:
             case 0b0110010:
             case 0b0110011:
-                return new Movlw();
+                return new Movlw(opcode);
             case 0b0110100:
             case 0b0110101:
             case 0b0110110:
