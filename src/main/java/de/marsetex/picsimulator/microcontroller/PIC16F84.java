@@ -11,8 +11,18 @@ public class PIC16F84 {
 
     private short[] programMemory = new short[8192];
 
+    private byte wRegister;
+
     public void loadOpcodeIntoProgramMemory(String addressOfOpcode, String opcode) {
         programMemory[Short.parseShort(addressOfOpcode, 16)] = Short.parseShort(opcode, 16);
         LOGGER.info("Stored " + opcode + " in address: " + addressOfOpcode);
+    }
+
+    public byte getWRegister() {
+        return wRegister;
+    }
+
+    public void setWRegister(byte wRegister) {
+        this.wRegister = wRegister;
     }
 }
