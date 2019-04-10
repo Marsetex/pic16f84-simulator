@@ -5,20 +5,19 @@ import java.util.List;
 import de.marsetex.picsimulator.microcontroller.PIC16F84;
 import de.marsetex.picsimulator.state.ISimState;
 import de.marsetex.picsimulator.state.SimStateNoFile;
-import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Simulator {
+public class Simulator implements Runnable {
 
 	private static final Logger LOGGER = LogManager.getLogger(Simulator.class);
 
 	private static Simulator simulator;
 
 	private final PIC16F84 picController;
+	private final PublishSubject<List<String>> codeLines;
 
-	private PublishSubject<List<String>> codeLines;
 	private ISimState currentState;
 
 	private Simulator() {
@@ -37,6 +36,11 @@ public class Simulator {
 		return simulator;
 	}
 
+	@Override
+	public void run() {
+
+	}
+
 	public void changeState(ISimState newState) {
 		if (currentState.isTransitionAllowed(newState)) {
 			currentState.onLeavingState(getInstance());
@@ -50,7 +54,7 @@ public class Simulator {
 			String opcode = codeLine.substring(0, 9);
 			if(!opcode.isBlank()) {
 				String[] splitOpcode = opcode.split(" ");
-				picController.loadOpcodeIntoProgramMemory(splitOpcode[0], splitOpcode[1]);
+				getPicController().loadOpcodeIntoProgramMemory(splitOpcode[0], splitOpcode[1]);
 			}
 		}
 	}
@@ -58,4 +62,10 @@ public class Simulator {
 	public PublishSubject<List<String>> getCodeLines() {
 		return codeLines;
 	}
+
+	public PIC16F84 getPicController() {
+		return picController;
+	}
+
+
 }
