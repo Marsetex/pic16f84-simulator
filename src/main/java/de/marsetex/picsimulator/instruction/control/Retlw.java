@@ -1,4 +1,4 @@
-package de.marsetex.picsimulator.instruction.literal;
+package de.marsetex.picsimulator.instruction.control;
 
 import de.marsetex.picsimulator.instruction.IPicInstruction;
 import de.marsetex.picsimulator.microcontroller.PIC16F84;
