@@ -4,16 +4,14 @@ import java.io.File;
 import java.util.List;
 
 import de.marsetex.picsimulator.Simulator;
+import de.marsetex.picsimulator.state.SimStateContMode;
 import de.marsetex.picsimulator.state.SimStateIdle;
 import de.marsetex.picsimulator.ui.SimulatorUiComponents;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 
 public class SimulatorUiController {
 
@@ -44,8 +42,12 @@ public class SimulatorUiController {
 	}
 
 	@FXML
-	private void showAboutDialog() {
+	private void runButtonClicked() {
+		simulator.changeState(new SimStateContMode());
+	}
 
+	@FXML
+	private void showAboutDialog() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("PIC - About");
 		alert.setHeaderText("PIC by Marcel");

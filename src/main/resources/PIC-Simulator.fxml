@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -61,6 +62,7 @@
               </rowConstraints>
                <children>
                   <ListView fx:id="codeView" prefHeight="449.0" prefWidth="496.0" GridPane.rowIndex="1" />
+                  <Button fx:id="buttonRun" mnemonicParsing="false" onAction="#runButtonClicked" text="Run" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <GridPane>
