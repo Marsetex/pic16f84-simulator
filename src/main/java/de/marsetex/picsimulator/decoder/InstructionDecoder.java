@@ -140,17 +140,17 @@ public class InstructionDecoder {
             case 0b0110111:
                 return new Retlw();
             case 0b0111000:
-                return new Iorlw();
+                return new Iorlw(opcode);
             case 0b0111001:
-                return new Andlw();
+                return new Andlw(opcode);
             case 0b0111010:
-                return new Xorlw();
+                return new Xorlw(opcode);
             case 0b0111100:
             case 0b0111101:
-                return new Sublw();
+                return new Sublw(opcode);
             case 0b0111110:
             case 0b0111111:
-                return new Addlw();
+                return new Addlw(opcode);
             default:
                 LOGGER.error("Unknown opcode with prefix 0b011");
                 return null;
