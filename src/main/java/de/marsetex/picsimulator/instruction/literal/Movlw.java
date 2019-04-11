@@ -5,16 +5,14 @@ import de.marsetex.picsimulator.microcontroller.PIC16F84;
 
 public class Movlw implements IPicInstruction {
 
-    private int opcodePrefix;
-    private int variableK;
+    private int k;
 
     public Movlw(short opcode) {
-        opcodePrefix = opcode >> 8;
-        variableK = opcode & 0x00FF;
+        k = opcode & 0x00FF;
     }
 
     @Override
     public void execute(PIC16F84 pic) {
-        pic.setWRegister((byte) variableK);
+        pic.setWRegister((byte) k);
     }
 }
