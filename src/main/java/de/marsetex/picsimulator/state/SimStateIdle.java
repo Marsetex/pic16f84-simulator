@@ -19,6 +19,9 @@ public class SimStateIdle implements ISimState {
 		if(state instanceof SimStateIdle) {
 			return true;
 		}
+		if(state instanceof SimStateContMode) {
+			return true;
+		}
 		return false;
 	}
 
@@ -26,8 +29,7 @@ public class SimStateIdle implements ISimState {
 	public void onEnteringState(Simulator simulator) {
 		LstParser parser = new LstParser(lstFile);
 		List<String> codeLines = parser.parse();
-		simulator.getCodeLines().onNext(codeLines);
-		simulator.loadCodeIntoProgramMemory(codeLines);
+		simulator.setCurrentCode(codeLines);
 	}
 
 	@Override
