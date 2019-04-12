@@ -1,10 +1,10 @@
-package de.marsetex.picsimulator.state;
+package de.marsetex.pic16f84sim.state;
 
 import java.io.File;
 import java.util.List;
 
-import de.marsetex.picsimulator.Simulator;
-import de.marsetex.picsimulator.parser.LstParser;
+import de.marsetex.pic16f84sim.parser.LstParser;
+import de.marsetex.pic16f84sim.simulator.Simulator;
 
 public class SimStateIdle implements ISimState {
 

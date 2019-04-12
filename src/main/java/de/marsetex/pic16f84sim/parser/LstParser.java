@@ -1,4 +1,4 @@
-package de.marsetex.picsimulator.parser;
+package de.marsetex.pic16f84sim.parser;
 
 import java.io.BufferedReader;
 import java.io.File;

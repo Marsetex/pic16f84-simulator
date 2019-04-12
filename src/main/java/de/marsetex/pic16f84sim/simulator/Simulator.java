@@ -1,12 +1,12 @@
-package de.marsetex.picsimulator;
+package de.marsetex.pic16f84sim.simulator;
 
 import java.util.List;
 
-import de.marsetex.picsimulator.decoder.InstructionDecoder;
-import de.marsetex.picsimulator.instruction.IPicInstruction;
-import de.marsetex.picsimulator.microcontroller.PIC16F84;
-import de.marsetex.picsimulator.state.ISimState;
-import de.marsetex.picsimulator.state.SimStateNoFile;
+import de.marsetex.pic16f84sim.decoder.InstructionDecoder;
+import de.marsetex.pic16f84sim.instruction.IPicInstruction;
+import de.marsetex.pic16f84sim.state.ISimState;
+import de.marsetex.pic16f84sim.state.SimStateNoFile;
+import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
 import io.reactivex.subjects.PublishSubject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

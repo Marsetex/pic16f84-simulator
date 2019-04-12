@@ -1,6 +1,6 @@
-package de.marsetex.picsimulator.state;
+package de.marsetex.pic16f84sim.state;
 
-import de.marsetex.picsimulator.Simulator;
+import de.marsetex.pic16f84sim.simulator.Simulator;
 
 public class SimStateContMode implements ISimState {
 

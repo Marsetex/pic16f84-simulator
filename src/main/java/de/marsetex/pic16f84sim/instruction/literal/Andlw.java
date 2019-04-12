@@ -1,7 +1,7 @@
-package de.marsetex.picsimulator.instruction.literal;
+package de.marsetex.pic16f84sim.instruction.literal;
 
-import de.marsetex.picsimulator.instruction.IPicInstruction;
-import de.marsetex.picsimulator.microcontroller.PIC16F84;
+import de.marsetex.pic16f84sim.instruction.IPicInstruction;
+import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
 
 /**
  * AND literal k with W. Sets flags: Z

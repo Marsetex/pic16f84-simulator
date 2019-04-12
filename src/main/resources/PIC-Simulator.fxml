@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="800.0" prefWidth="1280.0" stylesheets="@pic-simulator-stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.marsetex.picsimulator.ui.controller.SimulatorUiController">
+<VBox prefHeight="800.0" prefWidth="1280.0" stylesheets="@pic-simulator-stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.marsetex.pic16f84sim.ui.controller.SimulatorUiController">
   <children>
     <MenuBar>
       <menus>

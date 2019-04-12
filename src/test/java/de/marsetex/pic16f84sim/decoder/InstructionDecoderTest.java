@@ -1,12 +1,15 @@
-package de.marsetex.picsimulator.decoder;
+package de.marsetex.pic16f84sim.decoder;
 
-import de.marsetex.picsimulator.instruction.*;
-import de.marsetex.picsimulator.instruction.literal.*;
-import org.hamcrest.core.Is;
+import de.marsetex.pic16f84sim.instruction.IPicInstruction;
+import de.marsetex.pic16f84sim.instruction.literal.Addlw;
+import de.marsetex.pic16f84sim.instruction.literal.Andlw;
+import de.marsetex.pic16f84sim.instruction.literal.Iorlw;
+import de.marsetex.pic16f84sim.instruction.literal.Movlw;
+import de.marsetex.pic16f84sim.instruction.literal.Sublw;
+import de.marsetex.pic16f84sim.instruction.literal.Xorlw;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Test;
 
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class InstructionDecoderTest {

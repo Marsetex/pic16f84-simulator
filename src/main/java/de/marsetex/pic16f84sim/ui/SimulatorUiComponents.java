@@ -1,4 +1,4 @@
-package de.marsetex.picsimulator.ui;
+package de.marsetex.pic16f84sim.ui;
 
 import java.io.File;
 
