@@ -52,4 +52,8 @@ public class PIC16F84 {
     public void incrementProgramCounter() {
         programCounter++;
     }
+
+    public void setProgramCounterValue(short k) {
+        programCounter = k;
+    }
 }
