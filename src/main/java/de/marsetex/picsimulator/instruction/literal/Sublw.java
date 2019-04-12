@@ -3,16 +3,50 @@ package de.marsetex.picsimulator.instruction.literal;
 import de.marsetex.picsimulator.instruction.IPicInstruction;
 import de.marsetex.picsimulator.microcontroller.PIC16F84;
 
+/**
+ * Subtract W from literal k. Sets flags: C, DC and Z
+ * Datasheet: Page 68
+ */
 public class Sublw implements IPicInstruction {
 
-    private int k;
+    private byte k;
 
     public Sublw(short opcode) {
-        k = opcode & 0x00FF;
+        k = (byte) opcode;
     }
 
     @Override
     public void execute(PIC16F84 pic) {
-        pic.setWRegister((byte) (k-pic.getWRegister()));
+        int tempW = ~pic.getWRegister()+1;
+        int result = k+tempW;
+
+        isValueEqualsZero((byte) result);
+        hasOverflowOccured(result);
+        checkDigitCarry(tempW,k);
+        pic.setWRegister((byte) result);
+    }
+
+    private void checkDigitCarry(int tempW, int k) {
+        if((k & 0x0F) + (tempW & 0x0F)  > 0x0F) {
+            // set flag DC to 1
+        } else {
+            // set flag DC to 0
+        }
+    }
+
+    private void hasOverflowOccured(int result) {
+        if(result >= 0) {
+            // set flag C to 1
+        } else {
+            // set flag C to 0
+        }
+    }
+
+    private void isValueEqualsZero(byte result) {
+        if(result == 0x0) {
+            // set flag Z to 1
+        } else {
+            // set flag Z to 0
+        }
     }
 }
