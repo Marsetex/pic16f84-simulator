@@ -120,7 +120,7 @@ public class InstructionDecoder {
             case 0b0100:
                 return new Call();
             case 0b0101:
-                return new Goto();
+                return new Goto(opcode);
             default:
                 LOGGER.error("Unknown opcode with prefix 0b010");
                 return null;
