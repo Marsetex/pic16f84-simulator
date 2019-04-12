@@ -49,14 +49,15 @@ public class Simulator implements Runnable {
 		simulationRunning = true;
 
 		while(simulationRunning) {
-			for (String codeLine : currentCode) {
-				String opcodeAsString = codeLine.substring(0, 9);
-				if(!opcodeAsString.isBlank()) {
-					short opcode = picController.getNextInstruction();
-					IPicInstruction instruction = decoder.decode(opcode);
-					instruction.execute(picController);
-					picController.incrementProgramCounter();
-				}
+			short opcode = picController.getNextInstruction();
+			picController.incrementProgramCounter();
+			IPicInstruction instruction = decoder.decode(opcode);
+			LOGGER.info("Executed: " + instruction.getClass().getSimpleName());
+			instruction.execute(picController);
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}
