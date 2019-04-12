@@ -1,12 +1,12 @@
-package de.marsetex.picsimulator.ui.controller;
+package de.marsetex.pic16f84sim.ui.controller;
 
 import java.io.File;
 import java.util.List;
 
-import de.marsetex.picsimulator.Simulator;
-import de.marsetex.picsimulator.state.SimStateContMode;
-import de.marsetex.picsimulator.state.SimStateIdle;
-import de.marsetex.picsimulator.ui.SimulatorUiComponents;
+import de.marsetex.pic16f84sim.state.SimStateIdle;
+import de.marsetex.pic16f84sim.ui.SimulatorUiComponents;
+import de.marsetex.pic16f84sim.simulator.Simulator;
+import de.marsetex.pic16f84sim.state.SimStateContMode;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;

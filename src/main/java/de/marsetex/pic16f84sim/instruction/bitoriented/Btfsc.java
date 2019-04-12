@@ -1,7 +1,7 @@
-package de.marsetex.picsimulator.instruction.bitoriented;
+package de.marsetex.pic16f84sim.instruction.bitoriented;
 
-import de.marsetex.picsimulator.instruction.IPicInstruction;
-import de.marsetex.picsimulator.microcontroller.PIC16F84;
+import de.marsetex.pic16f84sim.instruction.IPicInstruction;
+import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
 
 public class Btfsc implements IPicInstruction {
 
