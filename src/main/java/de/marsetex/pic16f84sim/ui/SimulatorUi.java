@@ -22,6 +22,6 @@ public class SimulatorUi extends Application {
 	}
 
 	private Parent loadFXML() throws IOException {
-		return (Parent) FXMLLoader.load(getClass().getResource("/PIC-Simulator.fxml"));
+		return (Parent) FXMLLoader.load(getClass().getResource("/pic16f84-simulator-ui.fxml"));
 	}
 }
