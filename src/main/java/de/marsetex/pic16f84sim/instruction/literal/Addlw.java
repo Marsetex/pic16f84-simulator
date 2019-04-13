@@ -1,50 +1,45 @@
 package de.marsetex.pic16f84sim.instruction.literal;
 
-import de.marsetex.pic16f84sim.instruction.IPicInstruction;
+import de.marsetex.pic16f84sim.instruction.StatusFlagChangerInstruction;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
 
 /**
- * Add literal k and value of W register. Sets flags: C, DC and Z
+ * Add literal and value of W register. Sets flags: C, DC and Z
  * Datasheet: Page 57
  */
-public class Addlw implements IPicInstruction {
+public class Addlw extends StatusFlagChangerInstruction {
 
-    private byte k;
+    private byte literal;
 
     public Addlw(short opcode) {
-        k = (byte) opcode;
+        literal = (byte) opcode;
     }
 
     @Override
     public void execute(PIC16F84 pic) {
-        int result = pic.getWRegister() + k;
-        isValueEqualsZero((byte) result);
-        hasOverflowOccured(result);
-        checkDigitCarry(result, k);
-        pic.setWRegister((byte) result);
+        byte w = pic.getWRegister().getWRegister();
+        int result = w + literal;
+
+        isValueEqualsZero(pic, (byte) result);
+        hasOverflowOccured(pic, result);
+        checkDigitCarry(pic, w, literal);
+
+        pic.getWRegister().setWRegister((byte) result);
     }
 
-    private void checkDigitCarry(int tempW, int k) {
-        if((tempW & 0x0F) + (k & 0x0F)  > 0x0F) {
-            // set flag DC to 1
+    private void checkDigitCarry(PIC16F84 pic, int w, int literal) {
+        if((w & 0x0F) + (literal & 0x0F)  > 0x0F) {
+            pic.getStatusRegister().setDCFlag();
         } else {
-            // set flag DC to 0
+            pic.getStatusRegister().resetDCFlag();
         }
     }
 
-    private void hasOverflowOccured(int result) {
+    private void hasOverflowOccured(PIC16F84 pic, int result) {
         if(result > 0x0FF) {
-            // set flag C to 1
+            pic.getStatusRegister().setCFlag();
         } else {
-            // set flag C to 0
-        }
-    }
-
-    private void isValueEqualsZero(byte result) {
-        if(result == 0x0) {
-            // set flag Z to 1
-        } else {
-            // set flag Z to 0
+            pic.getStatusRegister().resetCFlag();
         }
     }
 }
