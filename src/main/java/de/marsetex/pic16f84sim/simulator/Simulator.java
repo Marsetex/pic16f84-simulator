@@ -50,7 +50,7 @@ public class Simulator implements Runnable {
 
 		while(simulationRunning) {
 			short opcode = picController.getNextInstruction();
-			picController.incrementProgramCounter();
+			picController.getProgramCounter().incrementProgramCounter();
 			IPicInstruction instruction = decoder.decode(opcode);
 			LOGGER.info("Executed: " + instruction.getClass().getSimpleName());
 			instruction.execute(picController);
@@ -67,7 +67,7 @@ public class Simulator implements Runnable {
 	}
 
 	public void reset() {
-		picController.resetProgramCounter();
+		picController.getProgramCounter().resetProgramCounter();
 	}
 
 	public void changeState(ISimState newState) {
