@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class InstructionDecoderTest {
+public class LiteralInstructionDecoderTest {
 
     private final InstructionDecoder decoder = new InstructionDecoder();
 
@@ -21,17 +21,6 @@ public class InstructionDecoderTest {
         String movlwOpcode = "3011";
         IPicInstruction instruction = decoder.decode(Short.parseShort(movlwOpcode, 16));
         assertThat(instruction, IsInstanceOf.instanceOf(Movlw.class));
-
-        Movlw movlw = (Movlw) instruction;
-        //assertThat(movlw.getOpcodePrefix(), is(0x0030));
-        //assertThat(movlw.getVariableK(), is(0x0011));
-    }
-
-    @Test
-    public void testDecodeRetlw() {
-        // String movlwOpcode = "3011";
-        // IInstruction instruction = decoder.decode(Short.parseShort(opCodeAsString, 16));
-        // assertThat(instruction, IsInstanceOf.instanceOf(Movlw.class));
     }
 
     @Test
