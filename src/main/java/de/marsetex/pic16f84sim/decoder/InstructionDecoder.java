@@ -149,7 +149,7 @@ public class InstructionDecoder {
     private IPicInstruction decodeOpcodeWithPrefix10(short opcode) {
         switch(opcode >> 11) {
             case 0b0100:
-                return new Call();
+                return new Call(opcode);
             case 0b0101:
                 return new Goto(opcode);
             default:
