@@ -169,7 +169,7 @@ public class InstructionDecoder {
             case 0b0110101:
             case 0b0110110:
             case 0b0110111:
-                return new Retlw();
+                return new Retlw(opcode);
             case 0b0111000:
                 return new Iorlw(opcode);
             case 0b0111001:
