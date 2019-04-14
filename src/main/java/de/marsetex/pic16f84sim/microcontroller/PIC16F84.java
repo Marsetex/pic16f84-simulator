@@ -1,55 +1,41 @@
 package de.marsetex.pic16f84sim.microcontroller;
 
+import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
+import de.marsetex.pic16f84sim.microcontroller.memory.ProgramMemory;
 import de.marsetex.pic16f84sim.microcontroller.memory.Stack;
 import de.marsetex.pic16f84sim.microcontroller.register.ProgramCounter;
-import de.marsetex.pic16f84sim.microcontroller.register.StatusRegister;
 import de.marsetex.pic16f84sim.microcontroller.register.WRegister;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class PIC16F84 {
 
-    private static final Logger LOGGER = LogManager.getLogger(PIC16F84.class);
-
-    private final short[] programMemory;
-
+    private final ProgramMemory programMemory;
+    private final DataMemory dataMemory;
     private final Stack stack;
+
     private final WRegister wRegister;
-    private final StatusRegister statusRegister;
-
-    private final ProgramCounter counter;
-
-    private byte[] ramBank0 = new byte[128];
-    private byte[] ramBank1 = new byte[128];
-
-    private byte portA;
-    private byte portB;
-    private byte trisA;
-    private byte trisB;
-    private byte option;
-    private byte pclath;
-    private byte intcon;
-    private byte fsr;
-    private byte status;
-    private byte pcl;
-    private byte tmr0;
-    private byte ind;
+    private final ProgramCounter programCounter;
 
     public PIC16F84() {
-        programMemory = new short[8192];
+        programMemory = new ProgramMemory();
+        dataMemory = new DataMemory();
         stack = new Stack();
+
         wRegister = new WRegister();
-        statusRegister = new StatusRegister();
-        counter = new ProgramCounter();
+        programCounter = new ProgramCounter();
     }
 
-    public void loadOpcodeIntoProgramMemory(String addressOfOpcode, String opcode) {
-        programMemory[Short.parseShort(addressOfOpcode, 16)] = Short.parseShort(opcode, 16);
-        LOGGER.info("Stored " + opcode + " in address: " + addressOfOpcode);
+    public ProgramMemory getProgramMemory() {
+        return programMemory;
     }
 
-    public short getNextInstruction() {
-        return programMemory[counter.getProgramCounter()];
+    public DataMemory getDataMemory() {
+        return dataMemory;
+    }
+
+    public Stack getStack() {
+        return stack;
     }
 
     public WRegister getWRegister() {
@@ -57,14 +43,6 @@ public class PIC16F84 {
     }
 
     public ProgramCounter getProgramCounter() {
-        return counter;
-    }
-
-    public StatusRegister getStatusRegister() {
-        return statusRegister;
-    }
-
-    public Stack getStack() {
-        return stack;
+        return programCounter;
     }
 }
