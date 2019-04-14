@@ -1,5 +1,6 @@
 package de.marsetex.pic16f84sim.microcontroller;
 
+import de.marsetex.pic16f84sim.microcontroller.memory.Stack;
 import de.marsetex.pic16f84sim.microcontroller.register.ProgramCounter;
 import de.marsetex.pic16f84sim.microcontroller.register.StatusRegister;
 import de.marsetex.pic16f84sim.microcontroller.register.WRegister;
@@ -12,6 +13,7 @@ public class PIC16F84 {
 
     private final short[] programMemory;
 
+    private final Stack stack;
     private final WRegister wRegister;
     private final StatusRegister statusRegister;
 
@@ -35,6 +37,7 @@ public class PIC16F84 {
 
     public PIC16F84() {
         programMemory = new short[8192];
+        stack = new Stack();
         wRegister = new WRegister();
         statusRegister = new StatusRegister();
         counter = new ProgramCounter();
@@ -59,5 +62,9 @@ public class PIC16F84 {
 
     public StatusRegister getStatusRegister() {
         return statusRegister;
+    }
+
+    public Stack getStack() {
+        return stack;
     }
 }
