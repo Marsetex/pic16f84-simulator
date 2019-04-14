@@ -50,7 +50,7 @@ public class Simulator implements Runnable {
 
 		while(simulationRunning) {
 			// Fetch
-			short opcode = picController.getNextInstruction();
+			short opcode = picController.getProgramMemory().getNextInstruction();
 			picController.getProgramCounter().incrementProgramCounter();
 
 			// Decode
@@ -111,7 +111,7 @@ public class Simulator implements Runnable {
 			String opcode = codeLine.substring(0, 9);
 			if(!opcode.isBlank()) {
 				String[] splitOpcode = opcode.split(" ");
-				getPicController().loadOpcodeIntoProgramMemory(splitOpcode[0], splitOpcode[1]);
+				picController.getProgramMemory().loadOpcodeIntoProgramMemory(splitOpcode[0], splitOpcode[1]);
 			}
 		}
 	}

@@ -16,6 +16,6 @@ public class Return implements IPicInstruction {
         ProgramCounter pc = pic.getProgramCounter();
         Stack stack = pic.getStack();
 
-        pc.setProgramCounter(stack.pop());
+        pc.setProgramCounterValue(stack.pop());
     }
 }

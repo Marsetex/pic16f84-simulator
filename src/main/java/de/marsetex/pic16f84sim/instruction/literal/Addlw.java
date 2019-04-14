@@ -2,6 +2,7 @@ package de.marsetex.pic16f84sim.instruction.literal;
 
 import de.marsetex.pic16f84sim.instruction.StatusFlagChangerInstruction;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
+import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHelper;
 
 /**
  * Add literal and value of W register. Sets flags: C, DC and Z
@@ -17,29 +18,29 @@ public class Addlw extends StatusFlagChangerInstruction {
 
     @Override
     public void execute(PIC16F84 pic) {
-        byte w = pic.getWRegister().getWRegister();
+        byte w = pic.getWRegister().getWRegisterValue();
         int result = w + literal;
 
-        isValueEqualsZero(pic, (byte) result);
-        hasOverflowOccured(pic, result);
-        checkDigitCarry(pic, w, literal);
+        isValueEqualsZero((byte) result);
+        hasOverflowOccured(result);
+        checkDigitCarry(w, literal);
 
-        pic.getWRegister().setWRegister((byte) result);
+        pic.getWRegister().setWRegisterValue((byte) result);
     }
 
-    private void checkDigitCarry(PIC16F84 pic, int w, int literal) {
+    private void checkDigitCarry(int w, int literal) {
         if((w & 0x0F) + (literal & 0x0F)  > 0x0F) {
-            pic.getStatusRegister().setDCFlag();
+            StatusRegisterHelper.setDCFlag();
         } else {
-            pic.getStatusRegister().resetDCFlag();
+            StatusRegisterHelper.resetDCFlag();
         }
     }
 
-    private void hasOverflowOccured(PIC16F84 pic, int result) {
+    private void hasOverflowOccured(int result) {
         if(result > 0x0FF) {
-            pic.getStatusRegister().setCFlag();
+            StatusRegisterHelper.setCFlag();
         } else {
-            pic.getStatusRegister().resetCFlag();
+            StatusRegisterHelper.setCFlag();
         }
     }
 }

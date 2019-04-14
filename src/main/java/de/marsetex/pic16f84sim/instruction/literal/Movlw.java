@@ -17,6 +17,6 @@ public class Movlw implements IPicInstruction {
 
     @Override
     public void execute(PIC16F84 pic) {
-        pic.getWRegister().setWRegister(literal);
+        pic.getWRegister().setWRegisterValue(literal);
     }
 }

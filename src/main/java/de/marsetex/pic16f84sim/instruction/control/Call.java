@@ -21,7 +21,7 @@ public class Call implements IPicInstruction {
         ProgramCounter pc = pic.getProgramCounter();
         
         // No +1 needed, because the pc is already incremented at this point
-        pic.getStack().push((short) (pc.getProgramCounter()));
-        pc.setProgramCounter(address);
+        pic.getStack().push((short) (pc.getProgramCounterValue()));
+        pc.setProgramCounterValue(address);
     }
 }

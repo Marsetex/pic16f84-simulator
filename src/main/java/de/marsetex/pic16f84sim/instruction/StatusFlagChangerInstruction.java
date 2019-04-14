@@ -1,14 +1,14 @@
 package de.marsetex.pic16f84sim.instruction;
 
-import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
+import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHelper;
 
 public abstract class StatusFlagChangerInstruction implements IPicInstruction {
 
-    protected void isValueEqualsZero(PIC16F84 pic, byte result) {
+    protected void isValueEqualsZero(byte result) {
         if(result == 0x0) {
-            pic.getStatusRegister().setZFlag();
+            StatusRegisterHelper.setZFlag();
         } else {
-            pic.getStatusRegister().resetZFlag();
+            StatusRegisterHelper.resetZFlag();
         }
     }
 }

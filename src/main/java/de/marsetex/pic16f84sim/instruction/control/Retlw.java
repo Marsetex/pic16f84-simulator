@@ -22,7 +22,7 @@ public class Retlw implements IPicInstruction {
         ProgramCounter pc = pic.getProgramCounter();
         Stack stack = pic.getStack();
 
-        pic.getWRegister().setWRegister(literal);
-        pc.setProgramCounter(stack.pop());
+        pic.getWRegister().setWRegisterValue(literal);
+        pc.setProgramCounterValue(stack.pop());
     }
 }
