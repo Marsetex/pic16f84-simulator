@@ -49,11 +49,17 @@ public class Simulator implements Runnable {
 		simulationRunning = true;
 
 		while(simulationRunning) {
+			// Fetch
 			short opcode = picController.getNextInstruction();
 			picController.getProgramCounter().incrementProgramCounter();
+
+			// Decode
 			IPicInstruction instruction = decoder.decode(opcode);
-			LOGGER.info("Executed: " + instruction.getClass().getSimpleName());
+
+			// Execute
 			instruction.execute(picController);
+			LOGGER.info("Executed: " + instruction.getClass().getSimpleName());
+
 			try {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
