@@ -11,6 +11,6 @@ public class Nop implements IPicInstruction {
 
     @Override
     public void execute(PIC16F84 pic) {
-        // Do noting
+        // Do nothing
     }
 }
