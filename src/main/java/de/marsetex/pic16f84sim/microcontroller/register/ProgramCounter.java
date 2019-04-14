@@ -9,18 +9,18 @@ public class ProgramCounter {
     }
 
     public void resetProgramCounter() {
-        setProgramCounter(0);
+        setProgramCounterValue(0);
     }
 
     public void incrementProgramCounter() {
         programCounter++;
     }
 
-    public int getProgramCounter() {
+    public int getProgramCounterValue() {
         return programCounter;
     }
 
-    public void setProgramCounter(int newCounterCalue) {
+    public void setProgramCounterValue(int newCounterCalue) {
         programCounter = newCounterCalue;
     }
 }

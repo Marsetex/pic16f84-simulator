@@ -4,11 +4,11 @@ public class WRegister {
 
     private byte wRegister;
 
-    public byte getWRegister() {
+    public byte getWRegisterValue() {
         return wRegister;
     }
 
-    public void setWRegister(byte wRegister) {
-        this.wRegister = wRegister;
+    public void setWRegisterValue(byte w) {
+        wRegister = w;
     }
 }
