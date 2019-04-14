@@ -67,7 +67,7 @@ public class InstructionDecoder {
             case 0b0000001:
                 return ((opcode >> 7) == 0b011) ? new Clrf() : new Clrw();
             case 0b0000010:
-                return new Subwf();
+                return new Subwf(opcode);
             case 0b0000011:
                 return new Decf();
             case 0b0000100:
