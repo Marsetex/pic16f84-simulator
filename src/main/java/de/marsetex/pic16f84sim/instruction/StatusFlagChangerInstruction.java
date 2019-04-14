@@ -11,4 +11,20 @@ public abstract class StatusFlagChangerInstruction implements IPicInstruction {
             StatusRegisterHelper.resetZFlag();
         }
     }
+
+    protected void checkDigitCarry2(int w, int literal) {
+        if((w & 0x0F) + (literal & 0x0F)  > 0x0F) {
+            StatusRegisterHelper.setDCFlag();
+        } else {
+            StatusRegisterHelper.resetDCFlag();
+        }
+    }
+
+    protected void hasOverflowOccured2(int result) {
+        if(result > 0x0FF) {
+            StatusRegisterHelper.setCFlag();
+        } else {
+            StatusRegisterHelper.setCFlag();
+        }
+    }
 }
