@@ -107,7 +107,7 @@ public class InstructionDecoder {
      */
     private IPicInstruction decodeSpecialCasesWithPrefix00(short opcode) {
         if((opcode >> 7) == 0b01) {
-            return new Movwf();
+            return new Movwf(opcode);
         }
 
         switch(opcode) {
