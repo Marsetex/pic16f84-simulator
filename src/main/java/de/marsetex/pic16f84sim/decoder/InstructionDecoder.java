@@ -79,7 +79,7 @@ public class InstructionDecoder {
             case 0b0000111:
                 return new Addwf();
             case 0b0001000:
-                return new Movf();
+                return new Movf(opcode);
             case 0b0001001:
                 return new Comf();
             case 0b0001010:
