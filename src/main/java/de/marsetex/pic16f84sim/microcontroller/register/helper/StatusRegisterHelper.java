@@ -33,6 +33,13 @@ public class StatusRegisterHelper {
         dataMemory.store(ADDRESS_OF_STATUS_REGISTER, statusRegisterValue);
     }
 
+    public static byte getCFlag() {
+        DataMemory dataMemory = Simulator.getInstance().getPicController().getDataMemory();
+
+        byte statusRegisterValue = dataMemory.load(ADDRESS_OF_STATUS_REGISTER);
+        return (byte) (statusRegisterValue & 0b00000001);
+    }
+
     public static void setDCFlag() {
         DataMemory dataMemory = Simulator.getInstance().getPicController().getDataMemory();
 
