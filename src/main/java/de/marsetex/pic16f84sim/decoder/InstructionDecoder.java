@@ -40,6 +40,9 @@ import de.marsetex.pic16f84sim.instruction.literal.Xorlw;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Datasheet: Page 56
+ */
 public class InstructionDecoder {
 
     private static final Logger LOGGER = LogManager.getLogger(InstructionDecoder.class);
@@ -73,7 +76,7 @@ public class InstructionDecoder {
             case 0b0000100:
                 return new Iorwf();
             case 0b0000101:
-                return new Andwf();
+                return new Andwf(opcode);
             case 0b0000110:
                 return new Xorwf();
             case 0b0000111:
