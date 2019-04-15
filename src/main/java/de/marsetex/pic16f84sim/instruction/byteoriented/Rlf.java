@@ -24,13 +24,16 @@ public class Rlf implements IPicInstruction {
         DataMemory dataMemory = pic.getDataMemory();
 
         byte fValue = dataMemory.load(fileRegister);
+        byte cFlag = StatusRegisterHelper.getCFlag();
 
-        int result = fValue << 1;
-        if((result & 0x0100) == 0) {
+        if((fValue & 0x80) == 0) {
             StatusRegisterHelper.resetCFlag();
         } else {
             StatusRegisterHelper.setCFlag();
         }
+
+        byte result = (byte) (fValue << 1);
+        result = (byte) (result | cFlag);
 
         if(destination == 0) {
             pic.getWRegister().setWRegisterValue((byte) result);
