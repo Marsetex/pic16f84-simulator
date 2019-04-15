@@ -1,12 +1,40 @@
 package de.marsetex.pic16f84sim.instruction.byteoriented;
 
 import de.marsetex.pic16f84sim.instruction.IPicInstruction;
+import de.marsetex.pic16f84sim.instruction.StatusFlagChangerInstruction;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
+import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
+import de.marsetex.pic16f84sim.microcontroller.register.WRegister;
 
-public class Xorwf implements IPicInstruction {
+/**
+ * Exclusive OR W with f. Sets flag: Z
+ * Datasheet: Page 70
+ */
+public class Xorwf extends StatusFlagChangerInstruction {
+
+    private final byte fileRegister;
+    private final short destination;
+
+    public Xorwf(short opcode) {
+        fileRegister = (byte) (opcode & 0x007F);
+        destination = (short) (opcode & 0x0080);
+    }
 
     @Override
     public void execute(PIC16F84 pic) {
+        DataMemory dataMemory = pic.getDataMemory();
+        WRegister wRegister = pic.getWRegister();
 
+        byte wValue = wRegister.getWRegisterValue();
+        byte fValue = dataMemory.load(fileRegister);
+
+        byte result = (byte) (wValue ^ fValue);
+        isValueEqualsZero(result);
+
+        if(destination == 0) {
+            wRegister.setWRegisterValue(result);
+        } else {
+            dataMemory.store(fileRegister, result);
+        }
     }
 }

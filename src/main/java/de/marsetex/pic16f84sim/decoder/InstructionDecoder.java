@@ -78,7 +78,7 @@ public class InstructionDecoder {
             case 0b0000101:
                 return new Andwf(opcode);
             case 0b0000110:
-                return new Xorwf();
+                return new Xorwf(opcode);
             case 0b0000111:
                 return new Addwf(opcode);
             case 0b0001000:
