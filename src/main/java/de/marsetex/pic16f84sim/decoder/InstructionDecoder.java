@@ -68,7 +68,7 @@ public class InstructionDecoder {
             case 0b0000000:
                 return decodeSpecialCasesWithPrefix00(opcode);
             case 0b0000001:
-                return ((opcode >> 7) == 0b011) ? new Clrf() : new Clrw();
+                return ((opcode >> 7) == 0b011) ? new Clrf(opcode) : new Clrw();
             case 0b0000010:
                 return new Subwf(opcode);
             case 0b0000011:
