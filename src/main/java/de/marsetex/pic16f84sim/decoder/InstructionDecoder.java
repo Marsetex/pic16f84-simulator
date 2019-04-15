@@ -84,19 +84,19 @@ public class InstructionDecoder {
             case 0b0001000:
                 return new Movf(opcode);
             case 0b0001001:
-                return new Comf();
+                return new Comf(opcode);
             case 0b0001010:
                 return new Incf(opcode);
             case 0b0001011:
-                return new Decfsz();
+                return new Decfsz(opcode);
             case 0b0001100:
                 return new Rrf(opcode);
             case 0b0001101:
                 return new Rlf(opcode);
             case 0b0001110:
-                return new Swapf();
+                return new Swapf(opcode);
             case 0b0001111:
-                return new Incfsz();
+                return new Incfsz(opcode);
             default:
                 LOGGER.error("Unknown opcode with prefix 0b000");
                 return null;
