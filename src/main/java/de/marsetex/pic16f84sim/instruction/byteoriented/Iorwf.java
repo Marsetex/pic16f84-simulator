@@ -7,7 +7,7 @@ import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 import de.marsetex.pic16f84sim.microcontroller.register.WRegister;
 
 /**
- * Inclusive OR W with f. Set flag: Z
+ * Inclusive OR W with f. Sets flag: Z
  * Datasheet: Page 64
  */
 public class Iorwf extends StatusFlagChangerInstruction {
