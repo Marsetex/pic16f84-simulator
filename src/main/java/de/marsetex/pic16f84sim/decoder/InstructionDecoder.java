@@ -90,7 +90,7 @@ public class InstructionDecoder {
             case 0b0001011:
                 return new Decfsz();
             case 0b0001100:
-                return new Rrf();
+                return new Rrf(opcode);
             case 0b0001101:
                 return new Rlf(opcode);
             case 0b0001110:
