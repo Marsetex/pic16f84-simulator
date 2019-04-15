@@ -2,10 +2,9 @@ package de.marsetex.pic16f84sim.instruction.byteoriented;
 
 import de.marsetex.pic16f84sim.instruction.StatusFlagChangerInstruction;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
-import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 
 /**
- * Clear f
+ * Clear f. Sets flag: Z
  * Datasheet: Page 60
  */
 public class Clrf extends StatusFlagChangerInstruction {
@@ -18,10 +17,8 @@ public class Clrf extends StatusFlagChangerInstruction {
 
     @Override
     public void execute(PIC16F84 pic) {
-        DataMemory dataMemory = pic.getDataMemory();
-
         isValueEqualsZero((byte) 0);
 
-        dataMemory.store(fileRegister, (byte) 0);
+        pic.getDataMemory().store(fileRegister, (byte) 0);
     }
 }

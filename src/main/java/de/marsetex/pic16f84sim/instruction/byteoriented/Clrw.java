@@ -5,7 +5,7 @@ import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
 import de.marsetex.pic16f84sim.microcontroller.register.WRegister;
 
 /**
- * Clear W
+ * Clear W. Sets flag: Z
  * Datasheet: Page 60
  */
 public class Clrw extends StatusFlagChangerInstruction {
