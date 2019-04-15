@@ -30,8 +30,8 @@ public class Subwf extends StatusFlagChangerInstruction {
 
         int result = fValue - wValue;
         isValueEqualsZero((byte) result);
-        hasOverflowOccured2(result);
-        checkDigitCarry2(wValue, fValue);
+        hasOverflowOccuredSubstraction(result);
+        checkDigitCarrySubstraction(wValue, fValue);
 
         if(destination == 0) {
             wRegister.setWRegisterValue((byte) result);

@@ -22,25 +22,9 @@ public class Sublw extends StatusFlagChangerInstruction {
         int result = literal +wTwosComplement;
 
         isValueEqualsZero((byte) result);
-        hasOverflowOccured(pic, result);
-        checkDigitCarry(pic, wTwosComplement, literal);
+        hasOverflowOccuredSubstraction(result);
+        checkDigitCarrySubstraction(wTwosComplement, literal);
 
         pic.getWRegister().setWRegisterValue((byte) result);
-    }
-
-    private void checkDigitCarry(PIC16F84 pic, int w, int k) {
-        if((k & 0x0F) + (w & 0x0F)  > 0x0F) {
-            StatusRegisterHelper.setDCFlag();
-        } else {
-            StatusRegisterHelper.resetDCFlag();
-        }
-    }
-
-    private void hasOverflowOccured(PIC16F84 pic, int result) {
-        if(result >= 0x0) {
-            StatusRegisterHelper.setCFlag();
-        } else {
-            StatusRegisterHelper.resetCFlag();
-        }
     }
 }
