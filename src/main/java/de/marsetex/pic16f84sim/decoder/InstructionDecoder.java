@@ -86,7 +86,7 @@ public class InstructionDecoder {
             case 0b0001001:
                 return new Comf();
             case 0b0001010:
-                return new Incf();
+                return new Incf(opcode);
             case 0b0001011:
                 return new Decfsz();
             case 0b0001100:
