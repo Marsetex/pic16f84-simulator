@@ -2,11 +2,31 @@ package de.marsetex.pic16f84sim.instruction.bitoriented;
 
 import de.marsetex.pic16f84sim.instruction.IPicInstruction;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
+import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 
+/**
+ * Bit Clear f
+ * Datasheet: Page 58
+ */
 public class Bcf implements IPicInstruction {
+
+    private final byte fileRegister;
+    private final int bitPosition;
+
+    public Bcf(short opcode) {
+        fileRegister = (byte) (opcode & 0x007F);
+        bitPosition = (opcode & 0x0380) >> 7;
+    }
 
     @Override
     public void execute(PIC16F84 pic) {
+        DataMemory dataMemory = pic.getDataMemory();
+        byte bitToSet = 1;
 
+        byte fValue = dataMemory.load(fileRegister);
+        bitToSet = (byte) (bitToSet << bitPosition);
+        fValue = (byte) (fValue & (~bitToSet));
+
+        dataMemory.store(fileRegister, fValue);
     }
 }

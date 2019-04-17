@@ -136,7 +136,7 @@ public class InstructionDecoder {
     private IPicInstruction decodeOpcodeWithPrefix01(short opcode) {
         switch(opcode >> 10) {
             case 0b0100:
-                return new Bcf();
+                return new Bcf(opcode);
             case 0b0101:
                 return new Bsf(opcode);
             case 0b0110:
