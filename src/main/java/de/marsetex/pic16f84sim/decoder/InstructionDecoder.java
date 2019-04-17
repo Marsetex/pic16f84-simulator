@@ -138,7 +138,7 @@ public class InstructionDecoder {
             case 0b0100:
                 return new Bcf();
             case 0b0101:
-                return new Bsf();
+                return new Bsf(opcode);
             case 0b0110:
                 return new Btfsc();
             case 0b0111:
