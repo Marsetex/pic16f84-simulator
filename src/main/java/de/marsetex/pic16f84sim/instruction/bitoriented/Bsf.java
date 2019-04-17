@@ -21,7 +21,7 @@ public class Bsf implements IPicInstruction {
     @Override
     public void execute(PIC16F84 pic) {
         DataMemory dataMemory = pic.getDataMemory();
-        byte bitToSet = 0;
+        byte bitToSet = 1;
 
         byte fValue = dataMemory.load(fileRegister);
         bitToSet = (byte) (bitToSet << bitPosition);
