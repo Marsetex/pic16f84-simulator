@@ -140,9 +140,9 @@ public class InstructionDecoder {
             case 0b0101:
                 return new Bsf(opcode);
             case 0b0110:
-                return new Btfsc();
+                return new Btfsc(opcode);
             case 0b0111:
-                return new Btfss();
+                return new Btfss(opcode);
             default:
                 LOGGER.error("Unknown opcode with prefix 0b001");
                 return null;
