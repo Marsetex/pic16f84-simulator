@@ -2,6 +2,7 @@ package de.marsetex.pic16f84sim.instruction.byteoriented;
 
 import de.marsetex.pic16f84sim.instruction.IPicInstruction;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
+import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 
 /**
  * Decrement f, Skip if 0
@@ -19,6 +20,19 @@ public class Decfsz implements IPicInstruction {
 
     @Override
     public void execute(PIC16F84 pic) {
+        DataMemory dataMemory = pic.getDataMemory();
 
+        byte fValue = dataMemory.load(fileRegister);
+
+        fValue--;
+        if(fValue == 0) {
+            pic.getProgramCounter().incrementProgramCounter();
+        }
+
+        if(destination == 0) {
+            pic.getWRegister().setWRegisterValue(fValue);
+        } else {
+            dataMemory.store(fileRegister, fValue);
+        }
     }
 }
