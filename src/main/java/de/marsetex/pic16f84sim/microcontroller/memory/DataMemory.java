@@ -4,12 +4,12 @@ import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHel
 import de.marsetex.pic16f84sim.simulator.Simulator;
 
 /**
- * Datasheet: Page 13
+ * Datasheet: Page 13, 14, 19
  */
 public class DataMemory {
 
-    private byte[] ramBank0;
-    private byte[] ramBank1;
+    private final byte[] ramBank0;
+    private final byte[] ramBank1;
 
     public DataMemory() {
         ramBank0 = new byte[128];
@@ -18,6 +18,16 @@ public class DataMemory {
 
     public void store(byte fileRegisterAddress, byte valueToStore) {
         byte normalizedAddress = (byte) (fileRegisterAddress % 128);
+        byte bankSelectBit;
+
+        if(normalizedAddress == 0x0) {
+            byte fsrAddress = getFSR();
+            bankSelectBit = (byte) (fsrAddress >> 7);
+            normalizedAddress = (byte) (fsrAddress & 0b01111111);
+
+        } else {
+            bankSelectBit = getRP0Flag();
+        }
 
         if(normalizedAddress > 0x4F) {
             // TODO: Error msg
@@ -26,7 +36,7 @@ public class DataMemory {
             storeInGeneralPurposeRegister(normalizedAddress, valueToStore);
 
         } else {
-            storeInSpecialFunctionRegister(normalizedAddress, valueToStore);
+            storeInSpecialFunctionRegister(bankSelectBit, normalizedAddress, valueToStore);
         }
     }
 
@@ -34,7 +44,7 @@ public class DataMemory {
         ramBank0[fileRegisterAddress] = valueToStore;
     }
 
-    private void storeInSpecialFunctionRegister(byte fileRegisterAddress, byte valueToStore) {
+    private void storeInSpecialFunctionRegister(byte bankSelectBit, byte fileRegisterAddress, byte valueToStore) {
         switch (fileRegisterAddress) {
             case 0x02: // PCL
             case 0x03: // STATUS
@@ -48,14 +58,14 @@ public class DataMemory {
             case 0x05: // PORTA (Bank0) or TRISA (Bank1)
             case 0x06: // PORTB (Bank0) or TRISB (Bank1)
             case 0x08: // EEDATA (Bank0) or EECON1 (Bank1)
-                if(getRP0Flag() == 0) {
+                if(bankSelectBit == 0) {
                     ramBank0[fileRegisterAddress] = valueToStore; // TMR0
                 } else {
                     ramBank1[fileRegisterAddress] = valueToStore; // OPTION
                 }
                 break;
             case 0x09:
-                if(getRP0Flag() == 0) {
+                if(bankSelectBit == 0) {
                     ramBank0[fileRegisterAddress] = valueToStore; // EEADR
                 }
                 break;
@@ -67,6 +77,16 @@ public class DataMemory {
 
     public byte load(byte fileRegisterAddress) {
         byte normalizedAddress = (byte) (fileRegisterAddress % 128);
+        byte bankSelectBit;
+
+        if(normalizedAddress == 0x0) {
+            byte fsrAddress = getFSR();
+            bankSelectBit = (byte) (fsrAddress >> 7);
+            normalizedAddress = (byte) (fsrAddress & 0b01111111);
+
+        } else {
+            bankSelectBit = getRP0Flag();
+        }
 
         if(normalizedAddress > 0x4F) {
             // TODO: Error msg
@@ -76,7 +96,7 @@ public class DataMemory {
             return loadFromGeneralPurposeRegister(normalizedAddress);
 
         } else {
-            return loadFromSpecialFunctionRegister(normalizedAddress);
+            return loadFromSpecialFunctionRegister(bankSelectBit, normalizedAddress);
         }
     }
 
@@ -84,8 +104,8 @@ public class DataMemory {
         return ramBank0[fileRegisterAddress];
     }
 
-    private byte loadFromSpecialFunctionRegister(byte fileRegisterAddress) {
-        if(getRP0Flag() == 0) {
+    private byte loadFromSpecialFunctionRegister(byte bankSelectBit, byte fileRegisterAddress) {
+        if(bankSelectBit == 0) {
             return ramBank0[fileRegisterAddress];
         } else {
             return ramBank1[fileRegisterAddress];
@@ -94,5 +114,9 @@ public class DataMemory {
 
     private byte getRP0Flag() {
         return (byte) (ramBank0[0x03] & 0b0010000);
+    }
+
+    private byte getFSR() {
+        return ramBank0[0x04];
     }
 }
