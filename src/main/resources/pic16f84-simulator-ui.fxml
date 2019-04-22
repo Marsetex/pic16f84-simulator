@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1280.0" stylesheets="@pic16f84-simulator-ui-stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.marsetex.pic16f84sim.ui.controller.SimulatorUiController">
+<VBox prefHeight="850.0" prefWidth="1300.0" style="-fx-background-color: #ffffff;" stylesheets="@pic16f84-simulator-ui-stylesheet.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.marsetex.pic16f84sim.ui.controller.SimulatorUiController">
   <children>
     <MenuBar>
       <menus>
@@ -30,53 +40,140 @@
         </Menu>
       </menus>
     </MenuBar>
-      <GridPane prefHeight="886.0" prefWidth="1280.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <GridPane GridPane.columnIndex="2">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <GridPane prefHeight="775.0" prefWidth="500.0" GridPane.columnIndex="1">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="254.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="661.0" minHeight="10.0" prefHeight="582.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="139.0" minHeight="0.0" prefHeight="79.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+      <ButtonBar fx:id="controlNavBar" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #ecf0f1;">
+        <buttons>
+            <Button fx:id="runButton" mnemonicParsing="false" onAction="#runButtonClicked" text="Run" />
+            <Button fx:id="stepButton" mnemonicParsing="false" onAction="#stepButtonClicked" text="Step" />
+          <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetButtonClicked" text="Reset" />
+            <Slider fx:id="quartzFrequencySlider" blockIncrement="1.0" max="20000.0" min="32.0" />
+            <Label fx:id="quartzFrequencyLabel" maxWidth="10.0" text="32000 Hz " />
+            <Label fx:id="runtimeCounterLabel" alignment="CENTER_RIGHT" text="0 µs">
+               <padding>
+                  <Insets right="20.0" />
+               </padding>
+            </Label>
+        </buttons>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="10.0" top="10.0" />
+         </padding>
+      </ButtonBar>
+      <SplitPane dividerPositions="0.7211538461538461" orientation="VERTICAL" style="-fx-background-color: #ffffff;" VBox.vgrow="ALWAYS">
+        <items>
+            <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <ListView fx:id="codeView" prefHeight="449.0" prefWidth="496.0" GridPane.rowIndex="1" />
-                  <Button fx:id="buttonRun" mnemonicParsing="false" onAction="#runButtonClicked" text="Run" GridPane.rowIndex="2" />
+                  <VBox prefHeight="558.0" prefWidth="918.0">
+                     <children>
+                        <ListView fx:id="codeView" prefHeight="563.0" prefWidth="766.0" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefHeight="558.0" prefWidth="363.0">
+                     <children>
+                        <TabPane prefHeight="574.0" prefWidth="362.0" style="-fx-border-width: 0 0 0 1; -fx-border-style: solid; -fx-border-color: #ecf0f1;" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="GPR">
+                                 <content>
+                                    <VBox prefHeight="200.0" prefWidth="362.0">
+                                       <children>
+                                          <TableView fx:id="gprTable" prefHeight="521.0" prefWidth="342.0">
+                                            <columns>
+                                              <TableColumn fx:id="gprTableAddress" prefWidth="90.0" text="Address" />
+                                              <TableColumn fx:id="gprTableHexValue" minWidth="0.0" prefWidth="120.0" text="Value (HEX)" />
+                                                <TableColumn fx:id="gprTableBinaryValue" prefWidth="130.0" text="Value (Binary)" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding></VBox>
+                                 </content>
+                              </Tab>
+                              <Tab text="SFR">
+                                 <content>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Label text="Label" />
+                                                <TextField />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </Tab>
+                            <Tab text="Stack">
+                                 <content>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <HBox prefHeight="42.0" prefWidth="362.0">
+                                             <children>
+                                                <Label text="Stack Pointer: ">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                   <padding>
+                                                      <Insets left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </Label>
+                                                <Label text="0">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                   <HBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefHeight="302.0" prefWidth="360.0">
+                                             <children>
+                                                <TableView prefHeight="218.0" prefWidth="340.0">
+                                                  <columns>
+                                                    <TableColumn prefWidth="95.0" text="Position" />
+                                                    <TableColumn prefWidth="244.0" text="Value" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
                </children>
-            </GridPane>
-            <GridPane>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-            </GridPane>
-         </children>
-      </GridPane>
+            </HBox>
+            <TabPane maxHeight="300.0" minHeight="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Console">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <TextArea prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                           </children></VBox>
+                     </content>
+                </Tab>
+                  <Tab text="Simulator State" />
+              </tabs>
+            </TabPane>
+        </items>
+      </SplitPane>
   </children>
 </VBox>
