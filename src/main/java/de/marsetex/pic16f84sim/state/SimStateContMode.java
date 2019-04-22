@@ -9,6 +9,9 @@ public class SimStateContMode implements ISimState {
         if(state instanceof SimStateIdle) {
             return true;
         }
+        if(state instanceof SimStateContMode) {
+            return true;
+        }
         return false;
     }
 
