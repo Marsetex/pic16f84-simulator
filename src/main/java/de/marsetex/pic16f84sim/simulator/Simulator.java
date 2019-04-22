@@ -21,6 +21,8 @@ public class Simulator implements Runnable {
 	private final InstructionDecoder decoder;
 
 	private final PublishSubject<List<String>> codeLines;
+	private final PublishSubject<Integer> currentExecutedCode;
+	private final PublishSubject<String> debugConsole;
 
 	private List<String> currentCode;
 	private ISimState currentState;
@@ -30,7 +32,10 @@ public class Simulator implements Runnable {
 		simulator = null;
 		picController = new PIC16F84();
 		decoder = new InstructionDecoder();
+
 		codeLines = PublishSubject.create();
+		currentExecutedCode = PublishSubject.create();
+		debugConsole = PublishSubject.create();
 
 		currentState = new SimStateNoFile();
 		currentState.onEnteringState(this);
@@ -53,6 +58,7 @@ public class Simulator implements Runnable {
 		while(simulationRunning) {
 			// Fetch
 			short opcode = picController.getProgramMemory().getNextInstruction();
+			notifyCurrentExecutedCode();
 			picController.getProgramCounter().incrementProgramCounter();
 
 			// Decode
@@ -60,6 +66,7 @@ public class Simulator implements Runnable {
 
 			// Execute
 			LOGGER.info("Executing: " + instruction.getClass().getSimpleName());
+			notifyDebugConsole("Executing: " + instruction.getClass().getSimpleName());
 			instruction.execute(picController);
 
 			try {
@@ -108,15 +115,31 @@ public class Simulator implements Runnable {
 
 	}
 
-	public PublishSubject<List<String>> getCodeLines() {
-		return codeLines;
-	}
-
 	public PIC16F84 getPicController() {
 		return picController;
 	}
 
+	public PublishSubject<List<String>> getCodeLines() {
+		return codeLines;
+	}
+
+	public PublishSubject<Integer> getCurrentExecutedCode() {
+		return currentExecutedCode;
+	}
+
+	public PublishSubject<String> getDebugConsole() {
+		return debugConsole;
+	}
+
 	private void notifyCodeChanged() {
 		codeLines.onNext(currentCode);
+	}
+
+	private void notifyCurrentExecutedCode() {
+		currentExecutedCode.onNext(picController.getProgramCounter().getProgramCounterValue());
+	}
+
+	private void notifyDebugConsole(String s) {
+		debugConsole.onNext(s);
 	}
 }
