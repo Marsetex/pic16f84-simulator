@@ -19,6 +19,7 @@ public class Simulator implements Runnable {
 
 	private final PIC16F84 picController;
 	private final InstructionDecoder decoder;
+
 	private final PublishSubject<List<String>> codeLines;
 
 	private List<String> currentCode;
@@ -46,6 +47,7 @@ public class Simulator implements Runnable {
 
 	@Override
 	public void run() {
+		resetSimulation();
 		simulationRunning = true;
 
 		while(simulationRunning) {
@@ -57,8 +59,8 @@ public class Simulator implements Runnable {
 			IPicInstruction instruction = decoder.decode(opcode);
 
 			// Execute
+			LOGGER.info("Executing: " + instruction.getClass().getSimpleName());
 			instruction.execute(picController);
-			LOGGER.info("Executed: " + instruction.getClass().getSimpleName());
 
 			try {
 				Thread.sleep(2000);
@@ -72,38 +74,18 @@ public class Simulator implements Runnable {
 		simulationRunning = false;
 	}
 
-	public void reset() {
+	public void resetSimulation() {
 		picController.getProgramCounter().resetProgramCounter();
 	}
 
-	public void changeState(ISimState newState) {
-		if (currentState.isTransitionAllowed(newState)) {
+	public boolean changeState(ISimState newState) {
+		boolean transitionAllowed = currentState.isTransitionAllowed(newState);
+		if (transitionAllowed) {
 			currentState.onLeavingState(getInstance());
 			currentState = newState;
 			currentState.onEnteringState(getInstance());
 		}
-	}
-
-	public PublishSubject<List<String>> getCodeLines() {
-		return codeLines;
-	}
-
-	public PIC16F84 getPicController() {
-		return picController;
-	}
-
-	public List<String> getCurrentCode() {
-		return currentCode;
-	}
-
-	public void setCurrentCode(List<String> currentCode) {
-		this.currentCode = currentCode;
-		notifyCodeChanged();
-		loadCodeIntoProgramMemory();
-	}
-
-	private void notifyCodeChanged() {
-		codeLines.onNext(currentCode);
+		return transitionAllowed;
 	}
 
 	private void loadCodeIntoProgramMemory() {
@@ -114,5 +96,27 @@ public class Simulator implements Runnable {
 				picController.getProgramMemory().loadOpcodeIntoProgramMemory(splitOpcode[0], splitOpcode[1]);
 			}
 		}
+	}
+
+	public void setCurrentCode(List<String> currentCode) {
+		this.currentCode = currentCode;
+		notifyCodeChanged();
+		loadCodeIntoProgramMemory();
+	}
+
+	public void setQuartzFrequency(long longValue) {
+
+	}
+
+	public PublishSubject<List<String>> getCodeLines() {
+		return codeLines;
+	}
+
+	public PIC16F84 getPicController() {
+		return picController;
+	}
+
+	private void notifyCodeChanged() {
+		codeLines.onNext(currentCode);
 	}
 }

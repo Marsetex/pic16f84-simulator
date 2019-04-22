@@ -1,17 +1,23 @@
 package de.marsetex.pic16f84sim.microcontroller.memory;
 
-import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHelper;
-import de.marsetex.pic16f84sim.simulator.Simulator;
+import io.reactivex.subjects.PublishSubject;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Datasheet: Page 13, 14, 19
  */
 public class DataMemory {
 
+    private final PublishSubject<byte[]> gprSubject;
+    private final PublishSubject<byte[]> sfrSubject;
+
     private final byte[] ramBank0;
     private final byte[] ramBank1;
 
-    public DataMemory() {
+    public DataMemory(PublishSubject<byte[]> gprSubject, PublishSubject<byte[]> sfrSubject) {
+        this.gprSubject = gprSubject;
+        this.sfrSubject = sfrSubject;
+
         ramBank0 = new byte[128];
         ramBank1 = new byte[128];
     }
@@ -34,9 +40,11 @@ public class DataMemory {
 
         } else if(normalizedAddress > 0x0B) {
             storeInGeneralPurposeRegister(normalizedAddress, valueToStore);
+            notifyChangeInGPR();
 
         } else {
             storeInSpecialFunctionRegister(bankSelectBit, normalizedAddress, valueToStore);
+            notifyChangeInSFR();
         }
     }
 
@@ -118,5 +126,13 @@ public class DataMemory {
 
     private byte getFSR() {
         return ramBank0[0x04];
+    }
+
+    private void notifyChangeInGPR() {
+        gprSubject.onNext(ramBank0);
+    }
+
+    private void notifyChangeInSFR() {
+        sfrSubject.onNext(ArrayUtils.addAll(ramBank0, ramBank1));
     }
 }
