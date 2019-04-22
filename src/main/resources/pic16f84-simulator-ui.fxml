@@ -84,8 +84,8 @@
                            <children>
                               <TableView fx:id="codeTable" prefHeight="534.0" prefWidth="794.0">
                                 <columns>
-                                  <TableColumn fx:id="codeTableCurrentLine" prefWidth="67.0" resizable="false" text="Executing" />
-                                  <TableColumn fx:id="codeTableLine" prefWidth="707.0" resizable="false" text="Code" />
+                                  <TableColumn fx:id="codeTableCurrentLine" prefWidth="47.0" resizable="false" text="Exec" />
+                                  <TableColumn fx:id="codeTableLine" prefWidth="727.0" resizable="false" text="Code" />
                                 </columns>
                               </TableView>
                            </children>
