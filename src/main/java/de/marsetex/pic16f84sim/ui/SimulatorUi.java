@@ -2,11 +2,15 @@ package de.marsetex.pic16f84sim.ui;
 
 import java.io.IOException;
 
+import de.marsetex.pic16f84sim.simulator.Simulator;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class SimulatorUi extends Application {
 
@@ -17,7 +21,11 @@ public class SimulatorUi extends Application {
 
 		stage.setScene(scene);
 		stage.setTitle("PIC16F84 Simulator");
-		stage.setMaximized(true);
+		stage.resizableProperty().setValue(Boolean.FALSE);
+		stage.setOnCloseRequest(event -> {
+			Simulator.getInstance().stopSimulation();
+			Platform.exit();
+		});
 		stage.show();
 	}
 
