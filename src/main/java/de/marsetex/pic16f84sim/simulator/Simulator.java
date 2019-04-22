@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.marsetex.pic16f84sim.decoder.InstructionDecoder;
 import de.marsetex.pic16f84sim.instruction.IPicInstruction;
+import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 import de.marsetex.pic16f84sim.state.ISimState;
 import de.marsetex.pic16f84sim.state.SimStateNoFile;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
@@ -82,7 +83,22 @@ public class Simulator implements Runnable {
 	}
 
 	public void resetSimulation() {
+		DataMemory dataMemory = picController.getDataMemory();
+
 		picController.getProgramCounter().resetProgramCounter();
+		dataMemory.store((byte) 0x02, (byte) 0x0); // Reset PCL
+		dataMemory.store((byte) 0x0A, (byte) 0x0); // Reset PCLATH
+
+		dataMemory.store((byte) 0x03, (byte) 0x18); // Reset STATUS
+		dataMemory.store((byte) 0x0B, (byte) 0x00); // Reset INTCON
+		dataMemory.store((byte) 0x85, (byte) 0x1F); // Reset TRISA
+		dataMemory.store((byte) 0x86, (byte) 0xFF); // Reset TRISB
+		dataMemory.store((byte) 0x81, (byte) 0xFF); // Reset OPTION
+
+		dataMemory.store((byte) 0x4F, (byte) 0x0); // Reset GPR
+
+		notifyCurrentExecutedCode();
+		notifyDebugConsole("Simulation reset");
 	}
 
 	public boolean changeState(ISimState newState) {
@@ -112,7 +128,7 @@ public class Simulator implements Runnable {
 	}
 
 	public void setQuartzFrequency(long longValue) {
-
+		
 	}
 
 	public PIC16F84 getPicController() {
