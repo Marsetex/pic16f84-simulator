@@ -1,5 +1,6 @@
 package de.marsetex.pic16f84sim.ui.controller;
 
+import de.marsetex.pic16f84sim.microcontroller.memory.Stack;
 import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHelper;
 import de.marsetex.pic16f84sim.simulator.Simulator;
 import de.marsetex.pic16f84sim.state.SimStateContMode;
@@ -9,6 +10,7 @@ import de.marsetex.pic16f84sim.ui.components.LstFileChooser;
 import de.marsetex.pic16f84sim.ui.models.CodeModel;
 import de.marsetex.pic16f84sim.ui.models.GprModel;
 import de.marsetex.pic16f84sim.ui.models.SfrModel;
+import de.marsetex.pic16f84sim.ui.models.StackModel;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -95,11 +97,20 @@ public class SimulatorUiController {
 	@FXML
 	private TableColumn<SfrModel, String> sfrTableBinaryValue;
 
+	@FXML
+	private TableView<StackModel> stackTable;
+
+	@FXML
+	private TableColumn<StackModel, Integer> stackTablePosition;
+
+	@FXML
+	private TableColumn<StackModel, String> stackTableHexValue;
+
+	@FXML
+	private Label stackPointerLabel;
 
 	@FXML
 	private TextArea debugConsole;
-
-	private List<String> codeLines;
 
 	public SimulatorUiController() {
 		simulator = Simulator.getInstance();
@@ -111,8 +122,11 @@ public class SimulatorUiController {
 
 		simulator.getPicController().getWRegisterSubject().subscribe(w -> outputWRegister(w));
 		simulator.getPicController().getPcSubject().subscribe(pc -> outputPc(pc));
+
 		simulator.getPicController().getGprSubject().subscribe(gpr -> outputGpr(gpr));
 		simulator.getPicController().getSfrSubject().subscribe(sfr -> outputSfr(sfr));
+		simulator.getPicController().getStackSubject().subscribe(stack -> outputStack(stack));
+		simulator.getPicController().getStackPointerSubject().subscribe(stackPointer -> outputStackPointer(stackPointer));
 	}
 
 	@FXML
@@ -132,6 +146,9 @@ public class SimulatorUiController {
 		sfrTableAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
 		sfrTableHexValue.setCellValueFactory(new PropertyValueFactory<>("HexValue"));
 		sfrTableBinaryValue.setCellValueFactory(new PropertyValueFactory<>("BinaryValue"));
+
+		stackTablePosition.setCellValueFactory(new PropertyValueFactory<>("Position"));
+		stackTableHexValue.setCellValueFactory(new PropertyValueFactory<>("HexValue"));
 	}
 
 	@FXML
@@ -179,7 +196,6 @@ public class SimulatorUiController {
 		}
 
 		codeTable.setItems(o);
-		this.codeLines = codeLines;
 	}
 
 	private void outputCurrentExecutedCode(Integer currentExecCode) {
@@ -253,6 +269,20 @@ public class SimulatorUiController {
 			cLabel.setText(String.valueOf(StatusRegisterHelper.getCFlag()));
 			dcLabel.setText(String.valueOf(StatusRegisterHelper.getDCFlag()));
 			zLabel.setText(String.valueOf(StatusRegisterHelper.getZFlag()));
+		});
+	}
+
+	private void outputStack(short[] stack) {
+		ObservableList<StackModel> stackTableContent = FXCollections.observableArrayList();
+		for (int i = 0; i < 8 ; i++) {
+			stackTableContent.add(new StackModel(i, stack[i]));
+		}
+		stackTable.setItems(stackTableContent);
+	}
+
+	private void outputStackPointer(Integer stackPointer) {
+		Platform.runLater(() -> {
+			stackPointerLabel.setText(String.valueOf(stackPointer));
 		});
 	}
 

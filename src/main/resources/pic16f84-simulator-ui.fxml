@@ -46,7 +46,7 @@
                <font>
                   <Font size="14.0" />
                </font></Button>
-            <Button fx:id="stepButton" mnemonicParsing="false" onAction="#stepButtonClicked" text="Step">
+            <Button fx:id="stepButton" disable="true" mnemonicParsing="false" onAction="#stepButtonClicked" text="Step">
                <font>
                   <Font size="14.0" />
                </font></Button>
@@ -332,10 +332,10 @@
                                           </HBox>
                                           <HBox prefHeight="302.0" prefWidth="360.0">
                                              <children>
-                                                <TableView fx:id="stackTable" prefHeight="218.0" prefWidth="340.0">
+                                                <TableView fx:id="stackTable" prefHeight="302.0" prefWidth="660.0">
                                                   <columns>
-                                                    <TableColumn fx:id="stackTablePosition" prefWidth="95.0" text="Position" />
-                                                    <TableColumn fx:id="stackTableValue" prefWidth="244.0" text="Value" />
+                                                    <TableColumn fx:id="stackTablePosition" prefWidth="93.0" text="Position" />
+                                                    <TableColumn fx:id="stackTableHexValue" prefWidth="248.0" text="Value (HEX)" />
                                                   </columns>
                                                 </TableView>
                                              </children>

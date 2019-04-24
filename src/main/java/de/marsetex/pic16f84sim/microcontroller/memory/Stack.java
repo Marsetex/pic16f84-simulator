@@ -1,12 +1,20 @@
 package de.marsetex.pic16f84sim.microcontroller.memory;
 
+import io.reactivex.subjects.PublishSubject;
+
 public class Stack {
 
     private final short[] stack;
 
+    private final PublishSubject<short[]> stackSubject;
+    private final PublishSubject<Integer> stackPointerSubject;
+
     private int stackPointer;
 
-    public Stack() {
+    public Stack(PublishSubject<short[]> sSubject, PublishSubject<Integer> spSubject) {
+        stackSubject = sSubject;
+        stackPointerSubject = spSubject;
+
         stack = new short[8];
     }
 
@@ -17,6 +25,8 @@ public class Stack {
         if(stackPointer == 8) {
             stackPointer = 0;
         }
+
+        notifyChangeInStack();
     }
 
     public short pop() {
@@ -26,6 +36,12 @@ public class Stack {
             stackPointer--;
         }
 
+        notifyChangeInStack();
         return stack[stackPointer];
+    }
+
+    private void notifyChangeInStack() {
+        stackSubject.onNext(stack);
+        stackPointerSubject.onNext(stackPointer);
     }
 }
