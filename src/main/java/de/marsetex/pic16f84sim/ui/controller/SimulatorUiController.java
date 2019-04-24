@@ -1,5 +1,6 @@
 package de.marsetex.pic16f84sim.ui.controller;
 
+import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHelper;
 import de.marsetex.pic16f84sim.simulator.Simulator;
 import de.marsetex.pic16f84sim.state.SimStateContMode;
 import de.marsetex.pic16f84sim.state.SimStateIdle;
@@ -50,10 +51,25 @@ public class SimulatorUiController {
 	private TableColumn<CodeModel, String> codeTableLine;
 
 	@FXML
-	private Label wRegisterLabel;
+	private Label wLabel;
 
 	@FXML
-	private Label progamCounterLabel;
+	private Label pcLabel;
+
+	@FXML
+	private Label pclLabel;
+
+	@FXML
+	private Label pclathLabel;
+
+	@FXML
+	private Label cLabel;
+
+	@FXML
+	private Label dcLabel;
+
+	@FXML
+	private Label zLabel;
 
 	@FXML
 	private TableView<GprModel> gprTable;
@@ -69,6 +85,16 @@ public class SimulatorUiController {
 
 	@FXML
 	private TableView<SfrModel> sfrTable;
+
+	@FXML
+	private TableColumn<SfrModel, String> sfrTableAddress;
+
+	@FXML
+	private TableColumn<SfrModel, String> sfrTableHexValue;
+
+	@FXML
+	private TableColumn<SfrModel, String> sfrTableBinaryValue;
+
 
 	@FXML
 	private TextArea debugConsole;
@@ -96,12 +122,16 @@ public class SimulatorUiController {
 			simulator.setQuartzFrequency(newValue.longValue());
 		});
 
+		codeTableCurrentLine.setCellValueFactory(new PropertyValueFactory<>("IsExecuted"));
+		codeTableLine.setCellValueFactory(new PropertyValueFactory<>("CodeLine"));
+
 		gprTableAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
 		gprTableHexValue.setCellValueFactory(new PropertyValueFactory<>("HexValue"));
 		gprTableBinaryValue.setCellValueFactory(new PropertyValueFactory<>("BinaryValue"));
 
-		codeTableCurrentLine.setCellValueFactory(new PropertyValueFactory<>("IsExecuted"));
-		codeTableLine.setCellValueFactory(new PropertyValueFactory<>("CodeLine"));
+		sfrTableAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
+		sfrTableHexValue.setCellValueFactory(new PropertyValueFactory<>("HexValue"));
+		sfrTableBinaryValue.setCellValueFactory(new PropertyValueFactory<>("BinaryValue"));
 	}
 
 	@FXML
@@ -127,6 +157,7 @@ public class SimulatorUiController {
 	private void resetButtonClicked() {
 		simulator.stopSimulation();
 		simulator.resetSimulation();
+		outputToDebugConsole("Simulation reset");
 	}
 
 	@FXML
@@ -171,11 +202,11 @@ public class SimulatorUiController {
 	}
 
 	private void outputWRegister(Byte w) {
-		Platform.runLater(() -> wRegisterLabel.setText(String.format("0x%1$02X", w)));
+		Platform.runLater(() -> wLabel.setText(String.format("0x%1$02X", w)));
 	}
 
 	private void outputPc(Integer pc) {
-		Platform.runLater(() -> progamCounterLabel.setText(String.format("0x%1$04X", pc)));
+		Platform.runLater(() -> pcLabel.setText(String.format("0x%1$04X", pc)));
 	}
 
 	private void outputGpr(byte[] gpr) {
@@ -187,8 +218,42 @@ public class SimulatorUiController {
 	}
 
 	private void outputSfr(byte[] sfr) {
+		outputSfrAsTable(sfr);
+		outputSfrToQuickAccess(sfr);
+	}
+
+	private void outputSfrAsTable(byte[] sfr) {
 		ObservableList<SfrModel> sfrTableContent = FXCollections.observableArrayList();
-		// sfrTable.setItems(sfrTableContent);
+		sfrTableContent.add(new SfrModel("INDR", 0x00, sfr[0x00]));
+		sfrTableContent.add(new SfrModel("TMR0", 0x01, sfr[0x01]));
+		sfrTableContent.add(new SfrModel("PCL", 0x02, sfr[0x02]));
+		sfrTableContent.add(new SfrModel("STATUS", 0x03, sfr[0x03]));
+		sfrTableContent.add(new SfrModel("FSR", 0x04, sfr[0x04]));
+		sfrTableContent.add(new SfrModel("PORTA", 0x05, sfr[0x05]));
+		sfrTableContent.add(new SfrModel("PORTB", 0x06, sfr[0x06]));
+		sfrTableContent.add(new SfrModel("undefined", 0x07, sfr[0x07]));
+		sfrTableContent.add(new SfrModel("EEDATA", 0x08, sfr[0x08]));
+		sfrTableContent.add(new SfrModel("EEADR", 0x09, sfr[0x09]));
+		sfrTableContent.add(new SfrModel("PCLATH", 0x0A, sfr[0x0A]));
+		sfrTableContent.add(new SfrModel("INTCON", 0x0B, sfr[0x0B]));
+		sfrTableContent.add(new SfrModel("INDR", 0x80, sfr[0x80]));
+		sfrTableContent.add(new SfrModel("OPTION", 0x81, sfr[0x81]));
+		sfrTableContent.add(new SfrModel("TRISA", 0x85, sfr[0x85]));
+		sfrTableContent.add(new SfrModel("TRISB", 0x86, sfr[0x86]));
+		sfrTableContent.add(new SfrModel("undefined", 0x87, sfr[0x87]));
+		sfrTableContent.add(new SfrModel("EECON1", 0x88, sfr[0x88]));
+		sfrTableContent.add(new SfrModel("EECON2", 0x89, sfr[0x89]));
+		sfrTable.setItems(sfrTableContent);
+	}
+
+	private void outputSfrToQuickAccess(byte[] sfr) {
+		Platform.runLater(() -> {
+			pclLabel.setText(String.valueOf(sfr[0x02]));
+			pclathLabel.setText(String.valueOf(sfr[0x0A]));
+			cLabel.setText(String.valueOf(StatusRegisterHelper.getCFlag()));
+			dcLabel.setText(String.valueOf(StatusRegisterHelper.getDCFlag()));
+			zLabel.setText(String.valueOf(StatusRegisterHelper.getZFlag()));
+		});
 	}
 
 	private void outputToDebugConsole(String msg) {
