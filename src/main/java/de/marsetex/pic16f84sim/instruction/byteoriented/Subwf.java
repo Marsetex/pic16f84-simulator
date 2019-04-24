@@ -25,13 +25,13 @@ public class Subwf extends StatusFlagChangerInstruction {
         DataMemory dataMemory = pic.getDataMemory();
         WRegister wRegister = pic.getWRegister();
 
-        byte wValue = wRegister.getWRegisterValue();
+        int wTwosComplement = ~pic.getWRegister().getWRegisterValue() + 1;
         byte fValue = dataMemory.load(fileRegister);
+        int result = fValue + wTwosComplement;
 
-        int result = fValue - wValue;
         isValueEqualsZero((byte) result);
         hasOverflowOccuredSubstraction(result);
-        checkDigitCarrySubstraction(wValue, fValue);
+        checkDigitCarrySubstraction(wTwosComplement, fValue);
 
         if(destination == 0) {
             wRegister.setWRegisterValue((byte) result);
