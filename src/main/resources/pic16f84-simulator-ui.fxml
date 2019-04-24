@@ -288,9 +288,9 @@
                                        <children>
                                           <TableView fx:id="sfrTable" prefHeight="521.0" prefWidth="342.0">
                                              <columns>
-                                                <TableColumn fx:id="sfrTableAddress" prefWidth="90.0" resizable="false" text="Address" />
-                                                <TableColumn fx:id="sfrTableHexValue" minWidth="0.0" prefWidth="120.0" resizable="false" text="Value (HEX)" />
-                                                <TableColumn fx:id="sfrTableBinaryValue" prefWidth="130.0" resizable="false" text="Value (Binary)" />
+                                                <TableColumn fx:id="sfrTableAddress" prefWidth="110.0" resizable="false" text="Address" />
+                                                <TableColumn fx:id="sfrTableHexValue" minWidth="0.0" prefWidth="113.0" resizable="false" text="Value (HEX)" />
+                                                <TableColumn fx:id="sfrTableBinaryValue" prefWidth="117.0" resizable="false" text="Value (Binary)" />
                                              </columns>
                                           </TableView>
                                        </children>
