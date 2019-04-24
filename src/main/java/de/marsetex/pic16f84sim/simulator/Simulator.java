@@ -28,6 +28,7 @@ public class Simulator implements Runnable {
 	private List<String> currentCode;
 	private ISimState currentState;
 	private boolean simulationRunning;
+	private long quartzFrequency;
 
 	private Simulator() {
 		simulator = null;
@@ -98,7 +99,6 @@ public class Simulator implements Runnable {
 		dataMemory.store((byte) 0x4F, (byte) 0x0); // Reset GPR
 
 		notifyCurrentExecutedCode();
-		notifyDebugConsole("Simulation reset");
 	}
 
 	public boolean changeState(ISimState newState) {
@@ -128,7 +128,7 @@ public class Simulator implements Runnable {
 	}
 
 	public void setQuartzFrequency(long longValue) {
-		
+		quartzFrequency = longValue;
 	}
 
 	public PIC16F84 getPicController() {
