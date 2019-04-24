@@ -8,7 +8,7 @@ public class StackModel {
     private SimpleIntegerProperty position;
     private SimpleStringProperty hexValue;
 
-    public StackModel(int position, int value) {
+    public StackModel(int position, short value) {
         this.position = new SimpleIntegerProperty(position);
         this.hexValue = new SimpleStringProperty(String.format("0x%1$04X", value));
     }
