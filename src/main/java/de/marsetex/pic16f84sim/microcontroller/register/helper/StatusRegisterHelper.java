@@ -58,6 +58,13 @@ public class StatusRegisterHelper {
         dataMemory.store(ADDRESS_OF_STATUS_REGISTER, statusRegisterValue);
     }
 
+    public static byte getDCFlag() {
+        DataMemory dataMemory = Simulator.getInstance().getPicController().getDataMemory();
+
+        byte statusRegisterValue = dataMemory.load(ADDRESS_OF_STATUS_REGISTER);
+        return (byte) ((statusRegisterValue & 0b00000010) >> 1);
+    }
+
     public static void setZFlag() {
         DataMemory dataMemory = Simulator.getInstance().getPicController().getDataMemory();
 
@@ -74,5 +81,12 @@ public class StatusRegisterHelper {
         statusRegisterValue = (byte) (statusRegisterValue & 0b11111011);
 
         dataMemory.store(ADDRESS_OF_STATUS_REGISTER, statusRegisterValue);
+    }
+
+    public static byte getZFlag() {
+        DataMemory dataMemory = Simulator.getInstance().getPicController().getDataMemory();
+
+        byte statusRegisterValue = dataMemory.load(ADDRESS_OF_STATUS_REGISTER);
+        return (byte) ((statusRegisterValue & 0b00000100) >> 2);
     }
 }
