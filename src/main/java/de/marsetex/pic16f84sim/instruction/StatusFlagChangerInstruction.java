@@ -25,7 +25,7 @@ public abstract class StatusFlagChangerInstruction implements IPicInstruction {
         if(result > 0x0FF) {
             StatusRegisterHelper.setCFlag();
         } else {
-            StatusRegisterHelper.setCFlag();
+            StatusRegisterHelper.resetCFlag();
         }
     }
 
