@@ -23,8 +23,8 @@ public class DataMemory {
     }
 
     public void store(byte fileRegisterAddress, byte valueToStore) {
-        byte normalizedAddress = (byte) (fileRegisterAddress % 128);
         byte bankSelectBit;
+        byte normalizedAddress = (byte) (fileRegisterAddress % 128);
 
         if(normalizedAddress == 0x0) {
             byte fsrAddress = getFSR();
@@ -33,6 +33,11 @@ public class DataMemory {
 
         } else {
             bankSelectBit = getRP0Flag();
+        }
+
+        if(normalizedAddress < 0) {
+            normalizedAddress = (byte) (normalizedAddress + 128);
+            bankSelectBit = 1;
         }
 
         if(normalizedAddress > 0x4F) {
@@ -84,8 +89,8 @@ public class DataMemory {
     }
 
     public byte load(byte fileRegisterAddress) {
-        byte normalizedAddress = (byte) (fileRegisterAddress % 128);
         byte bankSelectBit;
+        byte normalizedAddress = (byte) (fileRegisterAddress % 128);
 
         if(normalizedAddress == 0x0) {
             byte fsrAddress = getFSR();
@@ -94,6 +99,11 @@ public class DataMemory {
 
         } else {
             bankSelectBit = getRP0Flag();
+        }
+
+        if(normalizedAddress < 0) {
+            normalizedAddress = (byte) (normalizedAddress + 128);
+            bankSelectBit = 1;
         }
 
         if(normalizedAddress > 0x4F) {
