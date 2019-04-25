@@ -99,8 +99,6 @@ public class Simulator implements Runnable {
 		dataMemory.store((byte) 0x86, (byte) 0xFF); // Reset TRISB
 		dataMemory.store((byte) 0x81, (byte) 0xFF); // Reset OPTION
 
-		dataMemory.store((byte) 0x4F, (byte) 0x0); // Reset GPR
-
 		runtimeCounter = 0;
 		notifyCurrentExecutedCode();
 		notifyRuntimeCounter(runtimeCounter);

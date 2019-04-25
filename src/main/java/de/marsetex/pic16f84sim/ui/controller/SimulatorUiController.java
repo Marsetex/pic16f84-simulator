@@ -26,8 +26,6 @@ import java.util.List;
 
 public class SimulatorUiController {
 
-	private final Simulator simulator;
-
 	@FXML
 	private Menu openRecentMenuItem;
 
@@ -107,46 +105,50 @@ public class SimulatorUiController {
 	private TableColumn<StackModel, String> stackTableHexValue;
 
 	@FXML
-	ToggleGroup PortA0;
+	private ToggleGroup PortA0;
 
 	@FXML
-	ToggleGroup PortA1;
+	private ToggleGroup PortA1;
 
 	@FXML
-	ToggleGroup PortA2;
+	private ToggleGroup PortA2;
 
 	@FXML
-	ToggleGroup PortA3;
+	private ToggleGroup PortA3;
 
 	@FXML
-	ToggleGroup PortA4;
+	private ToggleGroup PortA4;
 
 	@FXML
-	ToggleGroup PortB0;
+	private ToggleGroup PortB0;
 
 	@FXML
-	ToggleGroup PortB1;
+	private ToggleGroup PortB1;
 
 	@FXML
-	ToggleGroup PortB2;
+	private ToggleGroup PortB2;
 
 	@FXML
-	ToggleGroup PortB3;
+	private ToggleGroup PortB3;
 
 	@FXML
-	ToggleGroup PortB4;
+	private ToggleGroup PortB4;
 
 	@FXML
-	ToggleGroup PortB5;
+	private ToggleGroup PortB5;
 
 	@FXML
-	ToggleGroup PortB6;
+	private ToggleGroup PortB6;
 
 	@FXML
-	ToggleGroup PortB7;
+	private ToggleGroup PortB7;
 
 	@FXML
 	private TextArea debugConsole;
+
+	private final Simulator simulator;
+
+	private File currentLstFile;
 
 	public SimulatorUiController() {
 		simulator = Simulator.getInstance();
@@ -168,6 +170,10 @@ public class SimulatorUiController {
 
 	@FXML
 	private void initialize() {
+		simulator.resetSimulation();
+		outputGpr(new byte[128]);
+		outputStack(new short[8]);
+
 		quartzFrequencySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
 			quartzFrequencyLabel.setText(newValue.intValue() + "000 Hz");
 			simulator.setQuartzFrequency(newValue.longValue() * 1000);
@@ -235,6 +241,7 @@ public class SimulatorUiController {
 		if (lstFile != null) {
 			openRecentMenuItem.getItems().add(new MenuItem(lstFile.getPath()));
 			simulator.changeState(new SimStateIdle(lstFile));
+			currentLstFile = lstFile;
 		}
 	}
 
@@ -252,6 +259,8 @@ public class SimulatorUiController {
 		simulator.stopSimulation();
 		simulator.resetSimulation();
 		outputToDebugConsole("Simulation reset");
+
+		simulator.changeState(new SimStateIdle(currentLstFile));
 	}
 
 	@FXML
