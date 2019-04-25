@@ -1,6 +1,6 @@
 package de.marsetex.pic16f84sim.ui.controller;
 
-import de.marsetex.pic16f84sim.microcontroller.memory.Stack;
+import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHelper;
 import de.marsetex.pic16f84sim.simulator.Simulator;
 import de.marsetex.pic16f84sim.state.SimStateContMode;
@@ -15,13 +15,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
@@ -98,6 +92,9 @@ public class SimulatorUiController {
 	private TableColumn<SfrModel, String> sfrTableBinaryValue;
 
 	@FXML
+	private Label stackPointerLabel;
+
+	@FXML
 	private TableView<StackModel> stackTable;
 
 	@FXML
@@ -107,7 +104,43 @@ public class SimulatorUiController {
 	private TableColumn<StackModel, String> stackTableHexValue;
 
 	@FXML
-	private Label stackPointerLabel;
+	ToggleGroup PortA0;
+
+	@FXML
+	ToggleGroup PortA1;
+
+	@FXML
+	ToggleGroup PortA2;
+
+	@FXML
+	ToggleGroup PortA3;
+
+	@FXML
+	ToggleGroup PortA4;
+
+	@FXML
+	ToggleGroup PortB0;
+
+	@FXML
+	ToggleGroup PortB1;
+
+	@FXML
+	ToggleGroup PortB2;
+
+	@FXML
+	ToggleGroup PortB3;
+
+	@FXML
+	ToggleGroup PortB4;
+
+	@FXML
+	ToggleGroup PortB5;
+
+	@FXML
+	ToggleGroup PortB6;
+
+	@FXML
+	ToggleGroup PortB7;
 
 	@FXML
 	private TextArea debugConsole;
@@ -134,6 +167,46 @@ public class SimulatorUiController {
 		quartzFrequencySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
 			quartzFrequencyLabel.setText(newValue.intValue() + "000 Hz");
 			simulator.setQuartzFrequency(newValue.longValue());
+		});
+
+		PortA0.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x85, 0, ((RadioButton) newValue));
+		});
+		PortA1.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x85, 1, ((RadioButton) newValue));
+		});
+		PortA2.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x85, 2, ((RadioButton) newValue));
+		});
+		PortA3.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x85, 3, ((RadioButton) newValue));
+		});
+		PortA4.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x85, 4, ((RadioButton) newValue));
+		});
+		PortB0.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x86, 0, ((RadioButton) newValue));
+		});
+		PortB1.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x86, 1, ((RadioButton) newValue));
+		});
+		PortB2.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x86, 2, ((RadioButton) newValue));
+		});
+		PortB3.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x86, 3, ((RadioButton) newValue));
+		});
+		PortB4.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x86, 4, ((RadioButton) newValue));
+		});
+		PortB5.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x86, 5, ((RadioButton) newValue));
+		});
+		PortB6.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x86, 6, ((RadioButton) newValue));
+		});
+		PortB7.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+			updateTrisRegister(0x86, 7, ((RadioButton) newValue));
 		});
 
 		codeTableCurrentLine.setCellValueFactory(new PropertyValueFactory<>("IsExecuted"));
@@ -186,6 +259,20 @@ public class SimulatorUiController {
 	private void exit() {
 		simulator.stopSimulation();
 		Platform.exit();
+	}
+
+	private void updateTrisRegister(int fileRegisterAddress, int bitPosition, RadioButton radioButton) {
+		DataMemory dataMemory = simulator.getPicController().getDataMemory();
+		byte trisValue = dataMemory.load((byte) fileRegisterAddress);
+		byte newTrisValue = (byte) (0x1 << bitPosition);
+
+		if("Input".equals(radioButton.getText())) {
+			newTrisValue = (byte) (trisValue | newTrisValue);
+		} else {
+			newTrisValue = (byte) (trisValue & (~newTrisValue));
+		}
+
+		dataMemory.store((byte) fileRegisterAddress, newTrisValue);
 	}
 
 	private void outputLstFile(List<String> codeLines) {
