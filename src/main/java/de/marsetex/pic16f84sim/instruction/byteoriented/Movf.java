@@ -21,7 +21,7 @@ public class Movf extends StatusFlagChangerInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         DataMemory dataMemory = pic.getDataMemory();
 
         byte value = dataMemory.load(fileRegister);
@@ -33,5 +33,7 @@ public class Movf extends StatusFlagChangerInstruction {
         } else {
             dataMemory.store(fileRegister, value);
         }
+
+        return 1;
     }
 }

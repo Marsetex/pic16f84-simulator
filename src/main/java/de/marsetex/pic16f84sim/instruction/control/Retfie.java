@@ -6,7 +6,7 @@ import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
 public class Retfie implements IPicInstruction {
 
     @Override
-    public void execute(PIC16F84 pic) {
-
+    public int execute(PIC16F84 pic) {
+        return 2;
     }
 }

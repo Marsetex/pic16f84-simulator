@@ -17,11 +17,13 @@ public class Call implements IPicInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         ProgramCounter pc = pic.getProgramCounter();
         
         // No +1 needed, because the pc is already incremented at this point
         pic.getStack().push((short) (pc.getProgramCounterValue()));
         pc.setProgramCounterValue(address);
+
+        return 2;
     }
 }

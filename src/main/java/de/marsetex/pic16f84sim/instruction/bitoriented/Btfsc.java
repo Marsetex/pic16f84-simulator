@@ -19,7 +19,7 @@ public class Btfsc implements IPicInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         DataMemory dataMemory = pic.getDataMemory();
         byte bitToSet = 1;
 
@@ -29,6 +29,8 @@ public class Btfsc implements IPicInstruction {
 
         if(fValue == 0) {
             pic.getProgramCounter().incrementProgramCounter();
+            return 2;
         }
+        return 1;
     }
 }

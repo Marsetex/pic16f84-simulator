@@ -18,11 +18,13 @@ public class Retlw implements IPicInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         ProgramCounter pc = pic.getProgramCounter();
         Stack stack = pic.getStack();
 
         pic.getWRegister().setWRegisterValue(literal);
         pc.setProgramCounterValue(stack.pop());
+
+        return 2;
     }
 }

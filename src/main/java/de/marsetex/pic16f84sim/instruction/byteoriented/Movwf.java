@@ -16,8 +16,9 @@ public class Movwf implements IPicInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         byte w = pic.getWRegister().getWRegisterValue();
         pic.getDataMemory().store(fileRegister, w);
+        return 1;
     }
 }

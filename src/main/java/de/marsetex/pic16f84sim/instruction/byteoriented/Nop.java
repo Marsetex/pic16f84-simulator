@@ -10,7 +10,7 @@ import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
 public class Nop implements IPicInstruction {
 
     @Override
-    public void execute(PIC16F84 pic) {
-        // Do nothing
+    public int execute(PIC16F84 pic) {
+        return 1;
     }
 }

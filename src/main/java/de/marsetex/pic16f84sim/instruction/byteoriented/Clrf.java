@@ -16,9 +16,11 @@ public class Clrf extends StatusFlagChangerInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         isValueEqualsZero((byte) 0);
 
         pic.getDataMemory().store(fileRegister, (byte) 0);
+
+        return 1;
     }
 }

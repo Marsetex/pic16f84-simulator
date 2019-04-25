@@ -12,10 +12,11 @@ import de.marsetex.pic16f84sim.microcontroller.register.ProgramCounter;
 public class Return implements IPicInstruction {
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         ProgramCounter pc = pic.getProgramCounter();
         Stack stack = pic.getStack();
 
         pc.setProgramCounterValue(stack.pop());
+        return 2;
     }
 }

@@ -19,7 +19,7 @@ public class Bcf implements IPicInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         DataMemory dataMemory = pic.getDataMemory();
         byte bitToSet = 1;
 
@@ -28,5 +28,6 @@ public class Bcf implements IPicInstruction {
         fValue = (byte) (fValue & (~bitToSet));
 
         dataMemory.store(fileRegister, fValue);
+        return 1;
     }
 }

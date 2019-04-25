@@ -16,11 +16,13 @@ public class Iorlw extends StatusFlagChangerInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         byte result = (byte) (pic.getWRegister().getWRegisterValue() | literal);
 
         isValueEqualsZero(result);
 
         pic.getWRegister().setWRegisterValue(result);
+
+        return 1;
     }
 }

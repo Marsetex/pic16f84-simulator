@@ -20,7 +20,7 @@ public class Comf extends StatusFlagChangerInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         DataMemory dataMemory = pic.getDataMemory();
 
         byte fValue = dataMemory.load(fileRegister);
@@ -33,5 +33,7 @@ public class Comf extends StatusFlagChangerInstruction {
         } else {
             dataMemory.store(fileRegister, fValue);
         }
+
+        return 1;
     }
 }

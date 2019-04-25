@@ -16,7 +16,8 @@ public class Goto implements IPicInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         pic.getProgramCounter().setProgramCounterValue(address);
+        return 2;
     }
 }

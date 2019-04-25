@@ -17,14 +17,16 @@ public class Sublw extends StatusFlagChangerInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
-        int wTwosComplement = (~pic.getWRegister().getWRegisterValue()+1) & 0xFF;
-        int result = literal +wTwosComplement;
+    public int execute(PIC16F84 pic) {
+        int wTwosComplement = (~pic.getWRegister().getWRegisterValue() + 1) & 0xFF;
+        int result = literal + wTwosComplement;
 
         isValueEqualsZero((byte) result);
         hasOverflowOccured(result);
         checkDigitCarry(wTwosComplement, literal);
 
         pic.getWRegister().setWRegisterValue((byte) result);
+
+        return 1;
     }
 }

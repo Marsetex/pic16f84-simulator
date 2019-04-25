@@ -20,7 +20,7 @@ public class Rrf implements IPicInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         DataMemory dataMemory = pic.getDataMemory();
 
         byte fValue = dataMemory.load(fileRegister);
@@ -41,5 +41,7 @@ public class Rrf implements IPicInstruction {
         } else {
             dataMemory.store(fileRegister, (byte) result);
         }
+
+        return 1;
     }
 }

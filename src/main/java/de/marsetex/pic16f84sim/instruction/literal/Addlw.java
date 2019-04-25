@@ -17,7 +17,7 @@ public class Addlw extends StatusFlagChangerInstruction {
     }
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         byte w = pic.getWRegister().getWRegisterValue();
         int result = w + literal;
 
@@ -26,5 +26,7 @@ public class Addlw extends StatusFlagChangerInstruction {
         checkDigitCarry(w, literal);
 
         pic.getWRegister().setWRegisterValue((byte) result);
+
+        return 1;
     }
 }

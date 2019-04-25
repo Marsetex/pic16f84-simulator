@@ -11,9 +11,11 @@ import de.marsetex.pic16f84sim.microcontroller.register.WRegister;
 public class Clrw extends StatusFlagChangerInstruction {
 
     @Override
-    public void execute(PIC16F84 pic) {
+    public int execute(PIC16F84 pic) {
         isValueEqualsZero((byte) 0);
 
         pic.getWRegister().setWRegisterValue((byte) 0);
+
+        return 1;
     }
 }
