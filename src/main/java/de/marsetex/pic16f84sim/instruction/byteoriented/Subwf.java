@@ -25,7 +25,7 @@ public class Subwf extends StatusFlagChangerInstruction {
         DataMemory dataMemory = pic.getDataMemory();
         WRegister wRegister = pic.getWRegister();
 
-        int wTwosComplement = (~pic.getWRegister().getWRegisterValue()+1) & 0xFF;
+        int wTwosComplement = (~pic.getWRegister().getWRegisterValue() + 1) & 0xFF;
         byte fValue = dataMemory.load(fileRegister);
         int result = fValue + wTwosComplement;
 
