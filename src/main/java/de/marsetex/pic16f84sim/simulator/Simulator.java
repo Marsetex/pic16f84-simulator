@@ -23,12 +23,14 @@ public class Simulator implements Runnable {
 
 	private final PublishSubject<List<String>> codeLines;
 	private final PublishSubject<Integer> currentExecutedCode;
+	private final PublishSubject<Long> runtimeCounterSubject;
 	private final PublishSubject<String> debugConsole;
 
 	private List<String> currentCode;
 	private ISimState currentState;
 	private boolean simulationRunning;
 	private long quartzFrequency;
+	private long runtimeCounter;
 
 	private Simulator() {
 		simulator = null;
@@ -37,6 +39,7 @@ public class Simulator implements Runnable {
 
 		codeLines = PublishSubject.create();
 		currentExecutedCode = PublishSubject.create();
+		runtimeCounterSubject = PublishSubject.create();
 		debugConsole = PublishSubject.create();
 
 		currentState = new SimStateNoFile();
@@ -69,7 +72,8 @@ public class Simulator implements Runnable {
 			// Execute
 			LOGGER.info("Executing: " + instruction.getClass().getSimpleName());
 			notifyDebugConsole("Executing: " + instruction.getClass().getSimpleName());
-			instruction.execute(picController);
+			int cycles = instruction.execute(picController);
+			updateRuntimeCounter(cycles);
 
 			try {
 				Thread.sleep(2000);
@@ -98,6 +102,7 @@ public class Simulator implements Runnable {
 
 		dataMemory.store((byte) 0x4F, (byte) 0x0); // Reset GPR
 
+		runtimeCounter = 0;
 		notifyCurrentExecutedCode();
 	}
 
@@ -119,6 +124,11 @@ public class Simulator implements Runnable {
 				picController.getProgramMemory().loadOpcodeIntoProgramMemory(splitOpcode[0], splitOpcode[1]);
 			}
 		}
+	}
+
+	private void updateRuntimeCounter(int cycles) {
+		runtimeCounter = runtimeCounter + cycles;
+		notifyRuntimeCounter(runtimeCounter);
 	}
 
 	public void setCurrentCode(List<String> currentCode) {
@@ -143,6 +153,10 @@ public class Simulator implements Runnable {
 		return currentExecutedCode;
 	}
 
+	public PublishSubject<Long> getRuntimeCounterSubject() {
+		return runtimeCounterSubject;
+	}
+
 	public PublishSubject<String> getDebugConsole() {
 		return debugConsole;
 	}
@@ -153,6 +167,10 @@ public class Simulator implements Runnable {
 
 	private void notifyCurrentExecutedCode() {
 		currentExecutedCode.onNext(picController.getProgramCounter().getProgramCounterValue());
+	}
+
+	private void notifyRuntimeCounter(long runtimeCounter) {
+		runtimeCounterSubject.onNext(runtimeCounter);
 	}
 
 	private void notifyDebugConsole(String s) {

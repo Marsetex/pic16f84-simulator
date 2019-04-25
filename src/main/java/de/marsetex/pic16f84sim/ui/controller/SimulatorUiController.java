@@ -38,6 +38,9 @@ public class SimulatorUiController {
 	private Label quartzFrequencyLabel;
 
 	@FXML
+	private Label runtimeCounterLabel;
+
+	@FXML
 	private TableView<CodeModel> codeTable;
 
 	@FXML
@@ -152,6 +155,7 @@ public class SimulatorUiController {
 
 		simulator.getCodeLines().subscribe(codeLines -> outputLstFile(codeLines));
 		simulator.getCurrentExecutedCode().subscribe(currentExecCode -> outputCurrentExecutedCode(currentExecCode));
+		simulator.getRuntimeCounterSubject().subscribe(runtimeCounter -> outputRuntimeCounter(runtimeCounter));
 
 		simulator.getPicController().getWRegisterSubject().subscribe(w -> outputWRegister(w));
 		simulator.getPicController().getPcSubject().subscribe(pc -> outputPc(pc));
@@ -301,6 +305,12 @@ public class SimulatorUiController {
 
 			codeTable.getItems().remove(0, codeTable.getItems().size());
 			codeTable.setItems(o);
+		});
+	}
+
+	private void outputRuntimeCounter(Long runtimeCounter) {
+		Platform.runLater(() -> {
+			runtimeCounterLabel.setText(String.valueOf(runtimeCounter) + " µs");
 		});
 	}
 
