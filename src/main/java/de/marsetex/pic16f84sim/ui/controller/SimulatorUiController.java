@@ -5,6 +5,7 @@ import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHel
 import de.marsetex.pic16f84sim.simulator.Simulator;
 import de.marsetex.pic16f84sim.state.SimStateContMode;
 import de.marsetex.pic16f84sim.state.SimStateIdle;
+import de.marsetex.pic16f84sim.state.SimStateStepMode;
 import de.marsetex.pic16f84sim.ui.components.AboutDialog;
 import de.marsetex.pic16f84sim.ui.components.LstFileChooser;
 import de.marsetex.pic16f84sim.ui.models.CodeModel;
@@ -25,6 +26,15 @@ import java.util.Date;
 import java.util.List;
 
 public class SimulatorUiController {
+
+	@FXML
+	private Button runButton;
+
+	@FXML
+	private Button stepButton;
+
+	@FXML
+	private Button resetButton;
 
 	@FXML
 	private Menu openRecentMenuItem;
@@ -153,6 +163,7 @@ public class SimulatorUiController {
 	public SimulatorUiController() {
 		simulator = Simulator.getInstance();
 
+		simulator.getFileLoad().subscribe(str -> activateButtons());
 		simulator.getDebugConsole().subscribe(msg -> outputToDebugConsole(msg));
 
 		simulator.getCodeLines().subscribe(codeLines -> outputLstFile(codeLines));
@@ -240,8 +251,8 @@ public class SimulatorUiController {
 
 		if (lstFile != null) {
 			openRecentMenuItem.getItems().add(new MenuItem(lstFile.getPath()));
-			simulator.changeState(new SimStateIdle(lstFile));
-			currentLstFile = lstFile;
+			simulator.setCurrentLstFile(lstFile);
+			simulator.changeState(new SimStateIdle());
 		}
 	}
 
@@ -252,6 +263,7 @@ public class SimulatorUiController {
 
 	@FXML
 	private void stepButtonClicked() {
+		simulator.changeState(new SimStateStepMode());
 	}
 
 	@FXML
@@ -260,7 +272,7 @@ public class SimulatorUiController {
 		simulator.resetSimulation();
 		outputToDebugConsole("Simulation reset");
 
-		simulator.changeState(new SimStateIdle(currentLstFile));
+		simulator.changeState(new SimStateIdle());
 	}
 
 	@FXML
@@ -286,6 +298,12 @@ public class SimulatorUiController {
 		}
 
 		dataMemory.store((byte) fileRegisterAddress, newTrisValue);
+	}
+
+	private void activateButtons() {
+		runButton.setDisable(false);
+		stepButton.setDisable(false);
+		resetButton.setDisable(false);
 	}
 
 	private void outputLstFile(List<String> codeLines) {

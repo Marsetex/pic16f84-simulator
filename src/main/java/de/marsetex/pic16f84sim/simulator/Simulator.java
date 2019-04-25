@@ -1,5 +1,6 @@
 package de.marsetex.pic16f84sim.simulator;
 
+import java.io.File;
 import java.util.List;
 
 import de.marsetex.pic16f84sim.decoder.InstructionDecoder;
@@ -9,6 +10,7 @@ import de.marsetex.pic16f84sim.state.ISimState;
 import de.marsetex.pic16f84sim.state.SimStateNoFile;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
 import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,12 +27,15 @@ public class Simulator implements Runnable {
 	private final PublishSubject<Integer> currentExecutedCode;
 	private final PublishSubject<Double> runtimeCounterSubject;
 	private final PublishSubject<String> debugConsole;
+	private final PublishSubject<String> fileLoad;
 
+	private File currentLstFile;
 	private List<String> currentCode;
 	private ISimState currentState;
 	private boolean simulationRunning;
 	private long quartzFrequency = 4000000;
 	private double runtimeCounter;
+
 
 	private Simulator() {
 		simulator = null;
@@ -41,6 +46,7 @@ public class Simulator implements Runnable {
 		currentExecutedCode = PublishSubject.create();
 		runtimeCounterSubject = PublishSubject.create();
 		debugConsole = PublishSubject.create();
+		fileLoad = PublishSubject.create();
 
 		currentState = new SimStateNoFile();
 		currentState.onEnteringState(this);
@@ -60,19 +66,7 @@ public class Simulator implements Runnable {
 		simulationRunning = true;
 
 		while(simulationRunning) {
-			// Fetch
-			short opcode = picController.getProgramMemory().getNextInstruction();
-			notifyCurrentExecutedCode();
-			picController.getProgramCounter().incrementProgramCounter();
-
-			// Decode
-			IPicInstruction instruction = decoder.decode(opcode);
-
-			// Execute
-			LOGGER.info("Executing: " + instruction.getClass().getSimpleName());
-			notifyDebugConsole("Executing: " + instruction.getClass().getSimpleName());
-			int cycles = instruction.execute(picController);
-			updateRuntimeCounter(cycles);
+			executeSingleInstruction();
 
 			try {
 				Thread.sleep(2000);
@@ -80,6 +74,22 @@ public class Simulator implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void executeSingleInstruction() {
+		// Fetch
+		short opcode = picController.getProgramMemory().getNextInstruction();
+		notifyCurrentExecutedCode();
+		picController.getProgramCounter().incrementProgramCounter();
+
+		// Decode
+		IPicInstruction instruction = decoder.decode(opcode);
+
+		// Execute
+		LOGGER.info("Executing: " + instruction.getClass().getSimpleName());
+		notifyDebugConsole("Executing: " + instruction.getClass().getSimpleName());
+		int cycles = instruction.execute(picController);
+		updateRuntimeCounter(cycles);
 	}
 
 	public void stopSimulation() {
@@ -136,12 +146,20 @@ public class Simulator implements Runnable {
 		loadCodeIntoProgramMemory();
 	}
 
+	public void setCurrentLstFile(File lstFile) {
+		currentLstFile = lstFile;
+	}
+
 	public void setQuartzFrequency(long longValue) {
 		quartzFrequency = longValue;
 	}
 
 	public PIC16F84 getPicController() {
 		return picController;
+	}
+
+	public File getCurrentLstFile() {
+		return currentLstFile;
 	}
 
 	public PublishSubject<List<String>> getCodeLines() {
@@ -158,6 +176,10 @@ public class Simulator implements Runnable {
 
 	public PublishSubject<String> getDebugConsole() {
 		return debugConsole;
+	}
+
+	public PublishSubject<String> getFileLoad() {
+		return fileLoad;
 	}
 
 	private void notifyCodeChanged() {

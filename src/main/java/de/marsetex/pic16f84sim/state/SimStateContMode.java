@@ -18,14 +18,16 @@ public class SimStateContMode implements ISimState {
 
     @Override
     public void onEnteringState(Simulator simulator) {
-        new Thread(simulator).start();
-
         LOGGER.info("Entering state 'SimStateContMode'");
         simulator.getDebugConsole().onNext("Entering state 'SimStateContMode'");
+
+        new Thread(simulator).start();
     }
 
     @Override
     public void onLeavingState(Simulator simulator) {
+        simulator.stopSimulation();
+
         LOGGER.info("Leaving state 'SimStateContMode'");
         simulator.getDebugConsole().onNext("Leaving state 'SimStateContMode'");
     }

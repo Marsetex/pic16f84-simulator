@@ -12,12 +12,6 @@ public class SimStateIdle implements ISimState {
 
 	private static final Logger LOGGER = LogManager.getLogger(SimStateIdle.class);
 
-	private final File lstFile;
-
-	public SimStateIdle(File file) {
-		lstFile = file;
-	}
-
 	@Override
 	public boolean isTransitionAllowed(ISimState state) {
 		if(state instanceof SimStateIdle) {
@@ -26,17 +20,20 @@ public class SimStateIdle implements ISimState {
 		if(state instanceof SimStateContMode) {
 			return true;
 		}
+		if(state instanceof SimStateStepMode) {
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public void onEnteringState(Simulator simulator) {
-		LstParser parser = new LstParser(lstFile);
-		List<String> codeLines = parser.parse();
-		simulator.setCurrentCode(codeLines);
-
 		LOGGER.info("Entering state 'SimStateIdle'");
 		simulator.getDebugConsole().onNext("Entering state 'SimStateIdle'");
+
+		LstParser parser = new LstParser(simulator.getCurrentLstFile());
+		List<String> codeLines = parser.parse();
+		simulator.setCurrentCode(codeLines);
 	}
 
 	@Override

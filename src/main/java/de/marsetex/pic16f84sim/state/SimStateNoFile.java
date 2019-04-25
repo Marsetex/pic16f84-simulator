@@ -24,6 +24,8 @@ public class SimStateNoFile implements ISimState {
 
 	@Override
 	public void onLeavingState(Simulator simulator) {
+		simulator.getFileLoad().onNext("");
+
 		LOGGER.info("Leaving state 'SimStateNoFile'");
 		simulator.getDebugConsole().onNext("Leaving state 'SimStateNoFile'");
 	}
