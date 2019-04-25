@@ -170,7 +170,7 @@ public class SimulatorUiController {
 	private void initialize() {
 		quartzFrequencySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
 			quartzFrequencyLabel.setText(newValue.intValue() + "000 Hz");
-			simulator.setQuartzFrequency(newValue.longValue());
+			simulator.setQuartzFrequency(newValue.longValue() * 1000);
 		});
 
 		PortA0.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
@@ -308,9 +308,9 @@ public class SimulatorUiController {
 		});
 	}
 
-	private void outputRuntimeCounter(Long runtimeCounter) {
+	private void outputRuntimeCounter(Double runtimeCounter) {
 		Platform.runLater(() -> {
-			runtimeCounterLabel.setText(String.valueOf(runtimeCounter) + " µs");
+			runtimeCounterLabel.setText(String.valueOf((Math.round(runtimeCounter * 100.0) / 100.0)) + " µs");
 		});
 	}
 

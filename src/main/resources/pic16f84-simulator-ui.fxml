@@ -54,8 +54,8 @@
                <font>
                   <Font size="14.0" />
                </font></Button>
-            <Slider fx:id="quartzFrequencySlider" blockIncrement="1.0" max="20000.0" min="32.0" />
-            <Label fx:id="quartzFrequencyLabel" maxWidth="100.0" prefHeight="20.0" text="32000 Hz ">
+            <Slider fx:id="quartzFrequencySlider" blockIncrement="1.0" max="20000.0" min="32.0" value="4000.0" />
+            <Label fx:id="quartzFrequencyLabel" maxWidth="100.0" prefHeight="20.0" text="4000000 Hz ">
                <font>
                   <Font size="14.0" />
                </font></Label>

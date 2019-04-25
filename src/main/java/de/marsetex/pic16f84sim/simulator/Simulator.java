@@ -23,14 +23,14 @@ public class Simulator implements Runnable {
 
 	private final PublishSubject<List<String>> codeLines;
 	private final PublishSubject<Integer> currentExecutedCode;
-	private final PublishSubject<Long> runtimeCounterSubject;
+	private final PublishSubject<Double> runtimeCounterSubject;
 	private final PublishSubject<String> debugConsole;
 
 	private List<String> currentCode;
 	private ISimState currentState;
 	private boolean simulationRunning;
-	private long quartzFrequency;
-	private long runtimeCounter;
+	private long quartzFrequency = 4000000;
+	private double runtimeCounter;
 
 	private Simulator() {
 		simulator = null;
@@ -45,7 +45,6 @@ public class Simulator implements Runnable {
 		currentState = new SimStateNoFile();
 		currentState.onEnteringState(this);
 
-		resetSimulation();
 		simulationRunning = false;
 	}
 
@@ -104,6 +103,7 @@ public class Simulator implements Runnable {
 
 		runtimeCounter = 0;
 		notifyCurrentExecutedCode();
+		notifyRuntimeCounter(runtimeCounter);
 	}
 
 	public boolean changeState(ISimState newState) {
@@ -127,7 +127,8 @@ public class Simulator implements Runnable {
 	}
 
 	private void updateRuntimeCounter(int cycles) {
-		runtimeCounter = runtimeCounter + cycles;
+		double timePerCycle = 4000000.0 / quartzFrequency;
+		runtimeCounter = runtimeCounter + (timePerCycle * cycles);
 		notifyRuntimeCounter(runtimeCounter);
 	}
 
@@ -153,7 +154,7 @@ public class Simulator implements Runnable {
 		return currentExecutedCode;
 	}
 
-	public PublishSubject<Long> getRuntimeCounterSubject() {
+	public PublishSubject<Double> getRuntimeCounterSubject() {
 		return runtimeCounterSubject;
 	}
 
@@ -169,7 +170,7 @@ public class Simulator implements Runnable {
 		currentExecutedCode.onNext(picController.getProgramCounter().getProgramCounterValue());
 	}
 
-	private void notifyRuntimeCounter(long runtimeCounter) {
+	private void notifyRuntimeCounter(double runtimeCounter) {
 		runtimeCounterSubject.onNext(runtimeCounter);
 	}
 
