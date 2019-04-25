@@ -29,8 +29,8 @@ public class Addwf extends StatusFlagChangerInstruction {
 
         int result = wValue + fValue;
         isValueEqualsZero((byte) result);
-        hasOverflowOccuredAddition(result);
-        checkDigitCarryAddition(wValue, fValue);
+        hasOverflowOccured(result);
+        checkDigitCarry(wValue, fValue);
 
         if(destination == 0) {
             wRegister.setWRegisterValue((byte) result);

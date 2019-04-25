@@ -22,8 +22,8 @@ public class Addlw extends StatusFlagChangerInstruction {
         int result = w + literal;
 
         isValueEqualsZero((byte) result);
-        hasOverflowOccuredAddition(result);
-        checkDigitCarryAddition(w, literal);
+        hasOverflowOccured(result);
+        checkDigitCarry(w, literal);
 
         pic.getWRegister().setWRegisterValue((byte) result);
     }

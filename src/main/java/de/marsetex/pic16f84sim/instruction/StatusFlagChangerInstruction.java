@@ -13,7 +13,7 @@ public abstract class StatusFlagChangerInstruction implements IPicInstruction {
         }
     }
 
-    protected void checkDigitCarryAddition(int w, int literal) {
+    protected void checkDigitCarry(int w, int literal) {
         if((w & 0x0F) + (literal & 0x0F)  > 0x0F) {
             StatusRegisterHelper.setDCFlag();
         } else {
@@ -21,24 +21,8 @@ public abstract class StatusFlagChangerInstruction implements IPicInstruction {
         }
     }
 
-    protected void hasOverflowOccuredAddition(int result) {
+    protected void hasOverflowOccured(int result) {
         if(result > 0x0FF) {
-            StatusRegisterHelper.setCFlag();
-        } else {
-            StatusRegisterHelper.resetCFlag();
-        }
-    }
-
-    protected void checkDigitCarrySubstraction(int w, int k) {
-        if((k & 0x0F) + (w & 0x0F)  > 0x0F) {
-            StatusRegisterHelper.setDCFlag();
-        } else {
-            StatusRegisterHelper.resetDCFlag();
-        }
-    }
-
-    protected void hasOverflowOccuredSubstraction(int result) {
-        if(result >= 0x0) {
             StatusRegisterHelper.setCFlag();
         } else {
             StatusRegisterHelper.resetCFlag();
