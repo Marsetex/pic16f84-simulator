@@ -45,6 +45,7 @@ public class Simulator implements Runnable {
 		currentState = new SimStateNoFile();
 		currentState.onEnteringState(this);
 
+		resetSimulation();
 		simulationRunning = false;
 	}
 
@@ -57,7 +58,6 @@ public class Simulator implements Runnable {
 
 	@Override
 	public void run() {
-		resetSimulation();
 		simulationRunning = true;
 
 		while(simulationRunning) {
