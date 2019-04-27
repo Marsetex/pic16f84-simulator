@@ -16,7 +16,16 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.File;
@@ -50,6 +59,9 @@ public class SimulatorUiController {
 
 	@FXML
 	private TableView<CodeModel> codeTable;
+
+	@FXML
+	private TableColumn<CodeModel, String> codeTableBreakpoint;
 
 	@FXML
 	private TableColumn<CodeModel, String> codeTableCurrentLine;
@@ -167,6 +179,7 @@ public class SimulatorUiController {
 		simulator.getDebugConsole().subscribe(msg -> outputToDebugConsole(msg));
 
 		simulator.getCodeLines().subscribe(codeLines -> outputLstFile(codeLines));
+		simulator.getBreakpoints().subscribe(breakpoints -> outputBreakpoints(breakpoints));
 		simulator.getCurrentExecutedCode().subscribe(currentExecCode -> outputCurrentExecutedCode(currentExecCode));
 		simulator.getRuntimeCounterSubject().subscribe(runtimeCounter -> outputRuntimeCounter(runtimeCounter));
 
@@ -230,6 +243,23 @@ public class SimulatorUiController {
 			updateTrisRegister(0x86, 7, ((RadioButton) newValue));
 		});
 
+		codeTable.setOnMouseClicked(event -> {
+			if(event.getClickCount() == 2) {
+				CodeModel selectedCode = codeTable.getSelectionModel().selectedItemProperty().get();
+
+				if(selectedCode == null) {
+					return;
+				}
+
+				if(selectedCode.getBreakpoint().contains("x")) {
+					simulator.removeBreakpoint(selectedCode);
+				} else {
+					simulator.addBreakpoint(selectedCode);
+				}
+			}
+		});
+
+		codeTableBreakpoint.setCellValueFactory(new PropertyValueFactory<>("Breakpoint"));
 		codeTableCurrentLine.setCellValueFactory(new PropertyValueFactory<>("IsExecuted"));
 		codeTableLine.setCellValueFactory(new PropertyValueFactory<>("CodeLine"));
 
@@ -310,7 +340,7 @@ public class SimulatorUiController {
 		ObservableList<CodeModel> o = FXCollections.observableArrayList();
 
 		for(String codeLine : codeLines) {
-			o.add(new CodeModel("", codeLine));
+			o.add(new CodeModel("", "", codeLine));
 		}
 
 		codeTable.setItems(o);
@@ -332,6 +362,34 @@ public class SimulatorUiController {
 
 			codeTable.getItems().remove(0, codeTable.getItems().size());
 			codeTable.setItems(o);
+		});
+	}
+
+	private void outputBreakpoints(List<Integer> breakpoints) {
+		Platform.runLater(() -> {
+			ObservableList<CodeModel> codeList = FXCollections.observableArrayList();
+			for(CodeModel model : codeTable.getItems()) {
+				String currentCode = model.getCodeLine().substring(0, 4);
+
+				boolean found = false;
+				for(Integer x : breakpoints) {
+					if(!currentCode.isBlank() && x.intValue() == Integer.parseInt(currentCode)) {
+						found = true;
+						break;
+					}
+				}
+
+				if(found) {
+					model.setBreakpoint("x");
+				} else {
+					model.setBreakpoint(" ");
+				}
+
+				codeList.add(model);
+			}
+
+			codeTable.getItems().remove(0, codeTable.getItems().size());
+			codeTable.setItems(codeList);
 		});
 	}
 
