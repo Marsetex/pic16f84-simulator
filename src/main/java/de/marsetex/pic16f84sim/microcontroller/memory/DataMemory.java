@@ -131,7 +131,7 @@ public class DataMemory {
     }
 
     private byte getRP0Flag() {
-        return (byte) (ramBank0[0x03] & 0b0010000);
+        return (byte) (ramBank0[0x03] & 0b00100000);
     }
 
     private byte getFSR() {
