@@ -178,7 +178,7 @@ public class Simulator implements Runnable {
 	}
 
 	public void removeBreakpoint(CodeModel selectedCode) {
-		int newBreakpointPosition = Integer.parseInt(selectedCode.getCodeLine().substring(0, 4));
+		int newBreakpointPosition = Integer.parseInt(selectedCode.getCodeLine().substring(0, 4), 16);
 
 		for(int i = 0; i < breakpoints.size(); i++) {
 			if(newBreakpointPosition == breakpoints.get(i).intValue()) {
@@ -193,7 +193,7 @@ public class Simulator implements Runnable {
 		String code = selectedCode.getCodeLine().substring(0, 4);
 
 		if(!code.isBlank()) {
-			breakpoints.add(Integer.parseInt(code));
+			breakpoints.add(Integer.parseInt(code,16));
 			notifyBreakpointChange();
 		}
 	}
