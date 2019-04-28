@@ -270,10 +270,10 @@
                                  <content>
                                     <VBox prefHeight="200.0" prefWidth="362.0">
                                        <children>
-                                          <TableView fx:id="gprTable" prefHeight="521.0" prefWidth="342.0">
+                                          <TableView fx:id="gprTable" editable="true" prefHeight="521.0" prefWidth="342.0">
                                             <columns>
                                               <TableColumn fx:id="gprTableAddress" prefWidth="90.0" resizable="false" text="Address" />
-                                              <TableColumn fx:id="gprTableHexValue" minWidth="0.0" prefWidth="120.0" resizable="false" text="Value (HEX)" />
+                                              <TableColumn fx:id="gprTableHexValue" minWidth="0.0" onEditCommit="#onGprHexValueChange" prefWidth="120.0" resizable="false" text="Value (HEX)" />
                                                 <TableColumn fx:id="gprTableBinaryValue" prefWidth="130.0" resizable="false" text="Value (Binary)" />
                                             </columns>
                                           </TableView>
@@ -287,10 +287,10 @@
                                  <content>
                                     <VBox prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <TableView fx:id="sfrTable" prefHeight="521.0" prefWidth="342.0">
+                                          <TableView fx:id="sfrTable" editable="true" prefHeight="521.0" prefWidth="342.0">
                                              <columns>
                                                 <TableColumn fx:id="sfrTableAddress" prefWidth="110.0" resizable="false" text="Address" />
-                                                <TableColumn fx:id="sfrTableHexValue" minWidth="0.0" prefWidth="113.0" resizable="false" text="Value (HEX)" />
+                                                <TableColumn fx:id="sfrTableHexValue" minWidth="0.0" onEditCommit="#onSfrHexValueChange" prefWidth="113.0" resizable="false" text="Value (HEX)" />
                                                 <TableColumn fx:id="sfrTableBinaryValue" prefWidth="117.0" resizable="false" text="Value (Binary)" />
                                              </columns>
                                           </TableView>

@@ -7,6 +7,7 @@ import de.marsetex.pic16f84sim.state.SimStateContMode;
 import de.marsetex.pic16f84sim.state.SimStateIdle;
 import de.marsetex.pic16f84sim.state.SimStateStepMode;
 import de.marsetex.pic16f84sim.ui.components.AboutDialog;
+import de.marsetex.pic16f84sim.ui.components.InvalidInputDialog;
 import de.marsetex.pic16f84sim.ui.components.LstFileChooser;
 import de.marsetex.pic16f84sim.ui.models.CodeModel;
 import de.marsetex.pic16f84sim.ui.models.GprModel;
@@ -16,6 +17,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -27,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -267,9 +270,13 @@ public class SimulatorUiController {
 		gprTableHexValue.setCellValueFactory(new PropertyValueFactory<>("HexValue"));
 		gprTableBinaryValue.setCellValueFactory(new PropertyValueFactory<>("BinaryValue"));
 
+		gprTableHexValue.setCellFactory(TextFieldTableCell.forTableColumn());
+
 		sfrTableAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
 		sfrTableHexValue.setCellValueFactory(new PropertyValueFactory<>("HexValue"));
 		sfrTableBinaryValue.setCellValueFactory(new PropertyValueFactory<>("BinaryValue"));
+
+		sfrTableHexValue.setCellFactory(TextFieldTableCell.forTableColumn());
 
 		stackTablePosition.setCellValueFactory(new PropertyValueFactory<>("Position"));
 		stackTableHexValue.setCellValueFactory(new PropertyValueFactory<>("HexValue"));
@@ -314,6 +321,36 @@ public class SimulatorUiController {
 	private void exit() {
 		simulator.stopSimulation();
 		Platform.exit();
+	}
+
+	public void onGprHexValueChange(TableColumn.CellEditEvent<GprModel, String> gprModelStringCellEditEvent) {
+		GprModel gprModel = gprTable.getSelectionModel().getSelectedItem();
+
+		try {
+			byte fileRegister = (byte) Integer.parseInt(gprModel.getAddress().replace("0x", "00"), 16);
+			byte newValue = (byte) Integer.parseInt(gprModelStringCellEditEvent.getNewValue().replace("0x", "00"), 16);
+			simulator.getPicController().getDataMemory().store(fileRegister, newValue);
+
+		} catch(NumberFormatException e) {
+			InvalidInputDialog.getInvalidInputDialog().showAndWait();
+		}
+	}
+
+	public void onSfrHexValueChange(TableColumn.CellEditEvent<SfrModel, String> sfrModelStringCellEditEvent) {
+		SfrModel sfrModel = sfrTable.getSelectionModel().getSelectedItem();
+
+		try {
+			String normalizedAddress = sfrModel.getAddress().replace("0x", "00").substring(0, 4);
+			byte fileRegister = (byte) Integer.parseInt(normalizedAddress, 16);
+
+			if(fileRegister != 0x0 && fileRegister != 0x7 && fileRegister != 0x80 && fileRegister != 0x87) {
+				byte newValue = (byte) Integer.parseInt(sfrModelStringCellEditEvent.getNewValue().replace("0x", "00"), 16);
+				simulator.getPicController().getDataMemory().store(fileRegister, newValue);
+			}
+
+		} catch(NumberFormatException e) {
+			InvalidInputDialog.getInvalidInputDialog().showAndWait();
+		}
 	}
 
 	private void updateTrisRegister(int fileRegisterAddress, int bitPosition, RadioButton radioButton) {
@@ -373,7 +410,7 @@ public class SimulatorUiController {
 
 				boolean found = false;
 				for(Integer x : breakpoints) {
-					if(!currentCode.isBlank() && x.intValue() == Integer.parseInt(currentCode)) {
+					if(!currentCode.isBlank() && x.intValue() == Integer.parseInt(currentCode, 16)) {
 						found = true;
 						break;
 					}
