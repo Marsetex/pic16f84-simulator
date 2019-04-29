@@ -40,6 +40,11 @@ public class Stack {
         return stack[stackPointer];
     }
 
+    public void resetStackPointer() {
+        stackPointer = 0;
+        notifyChangeInStack();
+    }
+
     private void notifyChangeInStack() {
         stackSubject.onNext(stack);
         stackPointerSubject.onNext(stackPointer);

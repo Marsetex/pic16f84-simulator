@@ -88,7 +88,7 @@ public class Simulator implements Runnable {
 				executeSingleInstruction();
 
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(800);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -131,6 +131,8 @@ public class Simulator implements Runnable {
 
 		runtimeCounter = 0;
 		breakpoints.clear();
+
+		picController.getStack().resetStackPointer();
 
 		notifyBreakpointChange();
 		notifyCurrentExecutedCode();
