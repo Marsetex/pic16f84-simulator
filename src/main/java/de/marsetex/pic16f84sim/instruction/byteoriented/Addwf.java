@@ -24,8 +24,8 @@ public class Addwf extends StatusFlagChangerInstruction {
         DataMemory dataMemory = pic.getDataMemory();
         WRegister wRegister = pic.getWRegister();
 
-        byte wValue = wRegister.getWRegisterValue();
-        byte fValue = dataMemory.load(fileRegister);
+        int wValue = wRegister.getWRegisterValue() & 0xFF;
+        int fValue = dataMemory.load(fileRegister) & 0xFF;
 
         int result = wValue + fValue;
         isValueEqualsZero((byte) result);

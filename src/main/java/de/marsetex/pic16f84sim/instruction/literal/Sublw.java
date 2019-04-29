@@ -19,7 +19,8 @@ public class Sublw extends StatusFlagChangerInstruction {
     @Override
     public int execute(PIC16F84 pic) {
         int wTwosComplement = (~pic.getWRegister().getWRegisterValue() + 1) & 0xFF;
-        int result = literal + wTwosComplement;
+        int tempLiteral = literal & 0xFF;
+        int result = tempLiteral + wTwosComplement;
 
         isValueEqualsZero((byte) result);
         hasOverflowOccured(result);

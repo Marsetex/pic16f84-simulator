@@ -18,8 +18,9 @@ public class Addlw extends StatusFlagChangerInstruction {
 
     @Override
     public int execute(PIC16F84 pic) {
-        byte w = pic.getWRegister().getWRegisterValue();
-        int result = w + literal;
+        int w = pic.getWRegister().getWRegisterValue() & 0xFF;
+        int tempLiteral = literal & 0xFF;
+        int result = w + tempLiteral;
 
         isValueEqualsZero((byte) result);
         hasOverflowOccured(result);
