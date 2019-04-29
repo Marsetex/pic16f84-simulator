@@ -290,6 +290,7 @@ public class SimulatorUiController {
 			openRecentMenuItem.getItems().add(new MenuItem(lstFile.getPath()));
 			simulator.setCurrentLstFile(lstFile);
 			simulator.changeState(new SimStateIdle());
+			simulator.resetSimulation();
 		}
 	}
 
