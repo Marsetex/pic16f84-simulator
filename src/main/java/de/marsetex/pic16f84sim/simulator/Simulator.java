@@ -9,6 +9,7 @@ import de.marsetex.pic16f84sim.decoder.InstructionDecoder;
 import de.marsetex.pic16f84sim.instruction.IPicInstruction;
 import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 import de.marsetex.pic16f84sim.state.ISimState;
+import de.marsetex.pic16f84sim.state.SimStateBreakpoint;
 import de.marsetex.pic16f84sim.state.SimStateIdle;
 import de.marsetex.pic16f84sim.state.SimStateNoFile;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
@@ -79,7 +80,7 @@ public class Simulator implements Runnable {
 			for(Integer breakpointPosition : breakpoints) {
 				if(pcValue == breakpointPosition.intValue()) {
 					simulationRunning = false;
-					changeState(new SimStateStepMode());
+					changeState(new SimStateBreakpoint());
 					break;
 				}
 			}
@@ -88,7 +89,7 @@ public class Simulator implements Runnable {
 				executeSingleInstruction();
 
 				try {
-					Thread.sleep(800);
+					Thread.sleep(700);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -99,7 +100,6 @@ public class Simulator implements Runnable {
 	public void executeSingleInstruction() {
 		// Fetch
 		short opcode = picController.getProgramMemory().getNextInstruction();
-		notifyCurrentExecutedCode();
 		picController.getProgramCounter().incrementProgramCounter();
 
 		// Decode
@@ -110,6 +110,8 @@ public class Simulator implements Runnable {
 		notifyDebugConsole("Executing: " + instruction.getClass().getSimpleName());
 		int cycles = instruction.execute(picController);
 		updateRuntimeCounter(cycles);
+
+		notifyCurrentExecutedCode();
 	}
 
 	public void stopSimulation() {

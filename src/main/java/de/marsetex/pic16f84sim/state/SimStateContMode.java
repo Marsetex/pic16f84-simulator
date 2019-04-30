@@ -13,7 +13,7 @@ public class SimStateContMode implements ISimState {
         if(state instanceof SimStateIdle) {
             return true;
         }
-        if(state instanceof SimStateStepMode) {
+        if(state instanceof SimStateBreakpoint) {
             return true;
         }
         return false;
