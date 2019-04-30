@@ -341,7 +341,7 @@ public class SimulatorUiController {
 		SfrModel sfrModel = sfrTable.getSelectionModel().getSelectedItem();
 
 		try {
-			String normalizedAddress = sfrModel.getAddress().replace("0x", "00").substring(0, 4);
+			String normalizedAddress = sfrModel.getAddress().substring(0, 4).replace("0x", "00");
 			byte fileRegister = (byte) Integer.parseInt(normalizedAddress, 16);
 
 			if(fileRegister != 0x0 && fileRegister != 0x7 && fileRegister != 0x80 && fileRegister != 0x87) {
