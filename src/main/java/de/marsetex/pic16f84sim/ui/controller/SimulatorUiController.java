@@ -17,7 +17,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -31,7 +30,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -311,6 +312,11 @@ public class SimulatorUiController {
 		outputToDebugConsole("Simulation reset");
 
 		simulator.changeState(new SimStateIdle());
+	}
+
+	@FXML
+	private void showHelp() throws IOException {
+		Desktop.getDesktop().open(new File(String.valueOf(getClass().getResource("/HelpPage.pdf")).substring(6)));
 	}
 
 	@FXML
