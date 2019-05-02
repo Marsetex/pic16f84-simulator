@@ -7,6 +7,8 @@ import java.util.concurrent.Flow;
 
 import de.marsetex.pic16f84sim.decoder.InstructionDecoder;
 import de.marsetex.pic16f84sim.instruction.IPicInstruction;
+import de.marsetex.pic16f84sim.instruction.bitoriented.Bsf;
+import de.marsetex.pic16f84sim.instruction.control.Call;
 import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 import de.marsetex.pic16f84sim.state.ISimState;
 import de.marsetex.pic16f84sim.state.SimStateBreakpoint;
@@ -98,6 +100,14 @@ public class Simulator implements Runnable {
 	}
 
 	public void executeSingleInstruction() {
+		if(picController.getTimer0().checkForTimer0Interrupt()) {
+			byte intconValue = picController.getDataMemory().load((byte) 0x0B);
+			intconValue = (byte) (intconValue & 0b01111111);
+			picController.getDataMemory().store((byte) 0x0B, intconValue);
+
+			new Call((short) 0x0004).execute(picController);
+		}
+
 		// Fetch
 		short opcode = picController.getProgramMemory().getNextInstruction();
 		picController.getProgramCounter().incrementProgramCounter();

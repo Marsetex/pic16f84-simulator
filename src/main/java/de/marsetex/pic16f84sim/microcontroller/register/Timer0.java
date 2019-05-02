@@ -24,17 +24,22 @@ public class Timer0 {
     public void increaseTimerCounter() {
         DataMemory dataMemory = picController.getDataMemory();
 
-        if(nextIncOverflow) {
+        byte timerCounter = dataMemory.load(TMR0_ADDRESS);
+
+        if(timerCounter == (byte) 0xFF) {
             byte intconValue = dataMemory.load(INTCON_ADDRESS);
             intconValue = (byte) (intconValue | 0b00000100);
 
             dataMemory.store(INTCON_ADDRESS, intconValue);
         }
 
-        byte timerCounter = dataMemory.load(TMR0_ADDRESS);
-        nextIncOverflow = timerCounter == 0xFF;
         timerCounter++;
 
         dataMemory.store(TMR0_ADDRESS, timerCounter);
+    }
+
+    public boolean checkForTimer0Interrupt() {
+        byte intconValue = picController.getDataMemory().load(INTCON_ADDRESS);
+        return (intconValue & 0b10100100) == 0xA4;
     }
 }
