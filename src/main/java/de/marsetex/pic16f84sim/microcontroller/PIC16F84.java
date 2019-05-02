@@ -4,6 +4,7 @@ import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 import de.marsetex.pic16f84sim.microcontroller.memory.ProgramMemory;
 import de.marsetex.pic16f84sim.microcontroller.memory.Stack;
 import de.marsetex.pic16f84sim.microcontroller.register.ProgramCounter;
+import de.marsetex.pic16f84sim.microcontroller.register.Timer0;
 import de.marsetex.pic16f84sim.microcontroller.register.WRegister;
 import io.reactivex.subjects.PublishSubject;
 
@@ -22,6 +23,7 @@ public class PIC16F84 {
 
     private final WRegister wRegister;
     private final ProgramCounter programCounter;
+    private final Timer0 timer0;
 
     public PIC16F84() {
         gprSubject = PublishSubject.create();
@@ -37,6 +39,7 @@ public class PIC16F84 {
 
         wRegister = new WRegister(wRegisterSubject);
         programCounter = new ProgramCounter(pcSubject);
+        timer0 = new Timer0(this);
     }
 
     public ProgramMemory getProgramMemory() {
@@ -57,6 +60,10 @@ public class PIC16F84 {
 
     public ProgramCounter getProgramCounter() {
         return programCounter;
+    }
+
+    public Timer0 getTimer0() {
+        return timer0;
     }
 
     public PublishSubject<byte[]> getGprSubject() {

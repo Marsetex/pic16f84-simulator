@@ -109,7 +109,9 @@ public class Simulator implements Runnable {
 		LOGGER.info("Executing: " + instruction.getClass().getSimpleName());
 		notifyDebugConsole("Executing: " + instruction.getClass().getSimpleName());
 		int cycles = instruction.execute(picController);
+
 		updateRuntimeCounter(cycles);
+		picController.getTimer0().increaseTimerCounter();
 
 		notifyCurrentExecutedCode();
 	}
