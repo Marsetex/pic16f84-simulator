@@ -22,7 +22,12 @@ public class Call implements IPicInstruction {
         
         // No +1 needed, because the pc is already incremented at this point
         pic.getStack().push((short) (pc.getProgramCounterValue()));
-        pc.setProgramCounterValue(address);
+
+        short pclathValue = pic.getDataMemory().load((byte) 0x0A);
+        pclathValue = (short) ((pclathValue & 0b00011000) << 8);
+
+        short nextPc = (short) (address | pclathValue);
+        pc.setProgramCounterValue(nextPc);
 
         return 2;
     }

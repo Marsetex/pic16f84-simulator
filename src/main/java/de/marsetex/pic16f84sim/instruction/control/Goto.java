@@ -17,7 +17,12 @@ public class Goto implements IPicInstruction {
 
     @Override
     public int execute(PIC16F84 pic) {
-        pic.getProgramCounter().setProgramCounterValue(address);
+        short pclathValue = pic.getDataMemory().load((byte) 0x0A);
+        pclathValue = (short) ((pclathValue & 0b00011000) << 8);
+
+        short nextPc = (short) (address | pclathValue);
+        pic.getProgramCounter().setProgramCounterValue(nextPc);
+
         return 2;
     }
 }
