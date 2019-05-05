@@ -316,7 +316,7 @@ public class SimulatorUiController {
 
 	@FXML
 	private void showHelp() throws IOException {
-		Desktop.getDesktop().open(new File(String.valueOf(getClass().getResource("/HelpPage.pdf")).substring(6)));
+		Desktop.getDesktop().open(new File(String.valueOf(getClass().getResource("/PIC16F84_Simulator_Dokumentation.pdf")).substring(6)));
 	}
 
 	@FXML
