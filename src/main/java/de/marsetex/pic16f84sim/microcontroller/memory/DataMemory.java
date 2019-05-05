@@ -1,5 +1,6 @@
 package de.marsetex.pic16f84sim.microcontroller.memory;
 
+import de.marsetex.pic16f84sim.microcontroller.register.ProgramCounter;
 import io.reactivex.subjects.PublishSubject;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -10,16 +11,23 @@ public class DataMemory {
 
     private final PublishSubject<byte[]> gprSubject;
     private final PublishSubject<byte[]> sfrSubject;
+    private final ProgramCounter programCounter;
 
     private final byte[] ramBank0;
     private final byte[] ramBank1;
 
-    public DataMemory(PublishSubject<byte[]> gprSubject, PublishSubject<byte[]> sfrSubject) {
+    public DataMemory(ProgramCounter programCounter, PublishSubject<byte[]> gprSubject, PublishSubject<byte[]> sfrSubject) {
+        this.programCounter = programCounter;
         this.gprSubject = gprSubject;
         this.sfrSubject = sfrSubject;
 
         ramBank0 = new byte[128];
         ramBank1 = new byte[128];
+    }
+
+    public void syncPcAndPcl(byte newPclValue) {
+        ramBank0[0x02] = newPclValue;
+        ramBank1[0x02] = newPclValue;
     }
 
     public void store(byte fileRegisterAddress, byte valueToStore) {
@@ -60,6 +68,11 @@ public class DataMemory {
     private void storeInSpecialFunctionRegister(byte bankSelectBit, byte fileRegisterAddress, byte valueToStore) {
         switch (fileRegisterAddress) {
             case 0x02: // PCL
+                ramBank0[fileRegisterAddress] = valueToStore;
+                ramBank1[fileRegisterAddress] = valueToStore;
+
+                copyToProgramCounter();
+                break;
             case 0x03: // STATUS
             case 0x04: // FSR
             case 0x0A: // PCLATH
@@ -86,6 +99,17 @@ public class DataMemory {
                 // Do nothing for file addresses: 00h (indirect addr.), 07h (undefined)
                 break;
         }
+    }
+
+    private void copyToProgramCounter() {
+        short pclValue = ramBank0[0x02];
+        short pclathValue = ramBank0[0x0A];
+
+        pclValue = (short) (pclValue & 0xFF);
+        pclathValue = (short) ((pclathValue & 0x1F) << 8);
+
+        int newPcValue = pclValue | pclathValue;
+        programCounter.setProgramCounterValue(newPcValue);
     }
 
     public byte load(byte fileRegisterAddress) {

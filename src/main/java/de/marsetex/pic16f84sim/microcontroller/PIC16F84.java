@@ -17,13 +17,13 @@ public class PIC16F84 {
     private final PublishSubject<Byte> wRegisterSubject;
     private final PublishSubject<Integer> pcSubject;
 
-    private final ProgramMemory programMemory;
-    private final DataMemory dataMemory;
-    private final Stack stack;
-
     private final WRegister wRegister;
     private final ProgramCounter programCounter;
     private final Timer0 timer0;
+
+    private final ProgramMemory programMemory;
+    private final DataMemory dataMemory;
+    private final Stack stack;
 
     public PIC16F84() {
         gprSubject = PublishSubject.create();
@@ -33,13 +33,13 @@ public class PIC16F84 {
         wRegisterSubject = PublishSubject.create();
         pcSubject = PublishSubject.create();
 
-        programMemory = new ProgramMemory();
-        dataMemory = new DataMemory(gprSubject, sfrSubject);
-        stack = new Stack(stackSubject, stackPointerSubject);
-
         wRegister = new WRegister(wRegisterSubject);
-        programCounter = new ProgramCounter(pcSubject);
+        programCounter = new ProgramCounter(this, pcSubject);
         timer0 = new Timer0(this);
+
+        programMemory = new ProgramMemory();
+        dataMemory = new DataMemory(programCounter, gprSubject, sfrSubject);
+        stack = new Stack(stackSubject, stackPointerSubject);
     }
 
     public ProgramMemory getProgramMemory() {
