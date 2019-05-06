@@ -43,15 +43,20 @@
     </MenuBar>
       <ButtonBar fx:id="controlNavBar" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #ecf0f1;">
         <buttons>
-            <Button fx:id="runButton" disable="true" mnemonicParsing="false" onAction="#runButtonClicked" text="Run">
+            <Button fx:id="runButton" mnemonicParsing="false" onAction="#runButtonClicked" text="Run">
                <font>
                   <Font size="14.0" />
                </font></Button>
-            <Button fx:id="stepButton" disable="true" mnemonicParsing="false" onAction="#stepButtonClicked" text="Step">
+            <Button fx:id="stopButton" mnemonicParsing="false" onAction="#stopButtonClicked" text="Stop">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="stepButton" mnemonicParsing="false" onAction="#stepButtonClicked" text="Step">
                <font>
                   <Font size="14.0" />
                </font></Button>
-          <Button fx:id="resetButton" disable="true" mnemonicParsing="false" onAction="#resetButtonClicked" text="Reset">
+          <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetButtonClicked" text="Reset">
                <font>
                   <Font size="14.0" />
                </font></Button>
