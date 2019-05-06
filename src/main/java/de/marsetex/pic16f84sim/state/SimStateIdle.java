@@ -14,7 +14,10 @@ public class SimStateIdle implements ISimState {
 
 	@Override
 	public boolean isTransitionAllowed(ISimState state) {
-		if(state instanceof SimStateIdle) {
+		if(state instanceof SimStateFileLoaded) {
+			return true;
+		}
+		if(state instanceof SimStateReset) {
 			return true;
 		}
 		if(state instanceof SimStateContMode) {
@@ -31,9 +34,7 @@ public class SimStateIdle implements ISimState {
 		LOGGER.info("Entering state 'SimStateIdle'");
 		simulator.getDebugConsole().onNext("Entering state 'SimStateIdle'");
 
-		LstParser parser = new LstParser(simulator.getCurrentLstFile());
-		List<String> codeLines = parser.parse();
-		simulator.setCurrentCode(codeLines);
+		simulator.stopSimulation();
 	}
 
 	@Override

@@ -4,7 +4,9 @@ import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 import de.marsetex.pic16f84sim.microcontroller.register.helper.StatusRegisterHelper;
 import de.marsetex.pic16f84sim.simulator.Simulator;
 import de.marsetex.pic16f84sim.state.SimStateContMode;
+import de.marsetex.pic16f84sim.state.SimStateFileLoaded;
 import de.marsetex.pic16f84sim.state.SimStateIdle;
+import de.marsetex.pic16f84sim.state.SimStateReset;
 import de.marsetex.pic16f84sim.state.SimStateStepMode;
 import de.marsetex.pic16f84sim.ui.components.AboutDialog;
 import de.marsetex.pic16f84sim.ui.components.InvalidInputDialog;
@@ -174,12 +176,9 @@ public class SimulatorUiController {
 
 	private final Simulator simulator;
 
-	private File currentLstFile;
-
 	public SimulatorUiController() {
 		simulator = Simulator.getInstance();
 
-		simulator.getFileLoad().subscribe(str -> activateButtons());
 		simulator.getDebugConsole().subscribe(msg -> outputToDebugConsole(msg));
 
 		simulator.getCodeLines().subscribe(codeLines -> outputLstFile(codeLines));
@@ -290,8 +289,8 @@ public class SimulatorUiController {
 		if (lstFile != null) {
 			openRecentMenuItem.getItems().add(new MenuItem(lstFile.getPath()));
 			simulator.setCurrentLstFile(lstFile);
-			simulator.changeState(new SimStateIdle());
-			simulator.resetSimulation();
+			simulator.changeState(new SimStateFileLoaded());
+			activateButtons();
 		}
 	}
 
@@ -301,17 +300,18 @@ public class SimulatorUiController {
 	}
 
 	@FXML
+	private void stopButtonClicked() {
+		simulator.changeState(new SimStateIdle());
+	}
+
+	@FXML
 	private void stepButtonClicked() {
 		simulator.changeState(new SimStateStepMode());
 	}
 
 	@FXML
 	private void resetButtonClicked() {
-		simulator.stopSimulation();
-		simulator.resetSimulation();
-		outputToDebugConsole("Simulation reset");
-
-		simulator.changeState(new SimStateIdle());
+		simulator.changeState(new SimStateReset());
 	}
 
 	@FXML
@@ -490,8 +490,8 @@ public class SimulatorUiController {
 
 	private void outputSfrToQuickAccess(byte[] sfr) {
 		Platform.runLater(() -> {
-			pclLabel.setText(String.valueOf(sfr[0x02]));
-			pclathLabel.setText(String.valueOf(sfr[0x0A]));
+			pclLabel.setText(String.format("0x%1$02X", sfr[0x02]));
+			pclathLabel.setText(String.format("0x%1$02X", sfr[0x0A]));
 			cLabel.setText(String.valueOf(StatusRegisterHelper.getCFlag()));
 			dcLabel.setText(String.valueOf(StatusRegisterHelper.getDCFlag()));
 			zLabel.setText(String.valueOf(StatusRegisterHelper.getZFlag()));

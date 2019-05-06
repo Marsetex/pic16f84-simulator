@@ -10,10 +10,13 @@ public class SimStateContMode implements ISimState {
 
     @Override
     public boolean isTransitionAllowed(ISimState state) {
+        if(state instanceof SimStateFileLoaded) {
+            return true;
+        }
         if(state instanceof SimStateIdle) {
             return true;
         }
-        if(state instanceof SimStateBreakpoint) {
+        if(state instanceof SimStateReset) {
             return true;
         }
         return false;

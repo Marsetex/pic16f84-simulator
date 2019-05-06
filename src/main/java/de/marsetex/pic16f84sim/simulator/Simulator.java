@@ -3,22 +3,17 @@ package de.marsetex.pic16f84sim.simulator;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Flow;
 
 import de.marsetex.pic16f84sim.decoder.InstructionDecoder;
 import de.marsetex.pic16f84sim.instruction.IPicInstruction;
-import de.marsetex.pic16f84sim.instruction.bitoriented.Bsf;
 import de.marsetex.pic16f84sim.instruction.control.Call;
 import de.marsetex.pic16f84sim.microcontroller.memory.DataMemory;
 import de.marsetex.pic16f84sim.state.ISimState;
-import de.marsetex.pic16f84sim.state.SimStateBreakpoint;
 import de.marsetex.pic16f84sim.state.SimStateIdle;
-import de.marsetex.pic16f84sim.state.SimStateNoFile;
+import de.marsetex.pic16f84sim.state.SimStateNoFileLoaded;
 import de.marsetex.pic16f84sim.microcontroller.PIC16F84;
-import de.marsetex.pic16f84sim.state.SimStateStepMode;
 import de.marsetex.pic16f84sim.ui.models.CodeModel;
 import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +31,6 @@ public class Simulator implements Runnable {
 	private final PublishSubject<List<Integer>> breakpointSubject;
 	private final PublishSubject<Double> runtimeCounterSubject;
 	private final PublishSubject<String> debugConsole;
-	private final PublishSubject<String> fileLoad;
 
 	private File currentLstFile;
 	private List<String> currentCode;
@@ -57,9 +51,8 @@ public class Simulator implements Runnable {
 		breakpointSubject = PublishSubject.create();
 		runtimeCounterSubject = PublishSubject.create();
 		debugConsole = PublishSubject.create();
-		fileLoad = PublishSubject.create();
 
-		currentState = new SimStateNoFile();
+		currentState = new SimStateNoFileLoaded();
 		currentState.onEnteringState(this);
 
 		simulationRunning = false;
@@ -82,7 +75,7 @@ public class Simulator implements Runnable {
 			for(Integer breakpointPosition : breakpoints) {
 				if(pcValue == breakpointPosition.intValue()) {
 					simulationRunning = false;
-					changeState(new SimStateBreakpoint());
+					changeState(new SimStateIdle());
 					break;
 				}
 			}
@@ -238,10 +231,6 @@ public class Simulator implements Runnable {
 
 	public PublishSubject<String> getDebugConsole() {
 		return debugConsole;
-	}
-
-	public PublishSubject<String> getFileLoad() {
-		return fileLoad;
 	}
 
 	private void notifyCodeChanged() {
