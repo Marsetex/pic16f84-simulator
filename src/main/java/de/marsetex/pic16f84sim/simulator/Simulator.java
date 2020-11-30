@@ -1,7 +1,9 @@
 package de.marsetex.pic16f84sim.simulator;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import de.marsetex.pic16f84sim.decoder.InstructionDecoder;
@@ -16,6 +18,9 @@ import de.marsetex.pic16f84sim.ui.models.CodeModel;
 import io.reactivex.subjects.PublishSubject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 
 public class Simulator implements Runnable {
 
